@@ -6,7 +6,7 @@
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/10/11 15:38:55 by ican             ###   ########.fr       */
+/*   Updated: 2025/10/11 19:37:49 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define CUB3D_H
 
 
-
-
+#include <stdio.h>
+#include "libft/libft.h"
 
 typedef struct t_cub3d
 {
@@ -24,6 +24,7 @@ typedef struct t_cub3d
 } t_cub3d;
 
 
+void error_writer(char *sentence , int code);
 
 
 

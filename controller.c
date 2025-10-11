@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   controller.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/11 15:00:41 by ican              #+#    #+#             */
-/*   Updated: 2025/10/11 19:29:58 by ican             ###   ########.fr       */
+/*   Created: 2025/10/11 19:29:29 by ican              #+#    #+#             */
+/*   Updated: 2025/10/11 19:38:26 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int main(char **arg, int ac)
+void arg_controller(char **arg, int ac)
 {
-    arg_controller(arg, ac);
-    
-
+    if (ac != 2)
+        error_writer("Amount of arguments is invalid.", 1);
 }

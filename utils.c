@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/11 15:00:41 by ican              #+#    #+#             */
-/*   Updated: 2025/10/11 19:29:58 by ican             ###   ########.fr       */
+/*   Created: 2025/10/11 19:35:47 by ican              #+#    #+#             */
+/*   Updated: 2025/10/11 19:37:41 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int main(char **arg, int ac)
+void error_writer(char *sentence , int code)
 {
-    arg_controller(arg, ac);
-    
-
+    printf("Error! %s", sentence);
+    exit(code);
 }
