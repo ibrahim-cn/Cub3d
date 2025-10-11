@@ -6,7 +6,7 @@
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 19:29:29 by ican              #+#    #+#             */
-/*   Updated: 2025/10/11 19:38:26 by ican             ###   ########.fr       */
+/*   Updated: 2025/10/11 20:28:21 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,7 @@ void arg_controller(char **arg, int ac)
 {
     if (ac != 2)
         error_writer("Amount of arguments is invalid.", 1);
+    
+
+
 }

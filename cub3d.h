@@ -6,7 +6,7 @@
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/10/11 19:37:49 by ican             ###   ########.fr       */
+/*   Updated: 2025/10/11 20:26:59 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct t_cub3d
 
 
 void error_writer(char *sentence , int code);
-
+void arg_controller(char **arg, int ac);
 
 
 #endif
