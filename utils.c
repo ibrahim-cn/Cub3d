@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-void error_writer(char *sentence , int code)
+void error_msg(char *message, int code)
 {
-    printf("Error! %s", sentence);
+    printf("Error! %s", message);
     exit(code);
 }

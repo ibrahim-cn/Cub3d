@@ -17,14 +17,18 @@
 #include <stdio.h>
 #include "libft/libft.h"
 
-typedef struct t_cub3d
+typedef struct s_map
 {
-    
-    
-} t_cub3d;
+	char	*name;
+}	t_map;
+
+typedef struct s_cub3d
+{
+	t_map	*map;
+}	t_cub3d;
 
 
-void error_writer(char *sentence , int code);
+void error_msg(char *message, int code);
 void arg_controller(char **arg, int ac);
 
 

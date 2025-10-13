@@ -15,7 +15,7 @@
 void arg_controller(char **arg, int ac)
 {
     if (ac != 2)
-        error_writer("Amount of arguments is invalid.", 1);
+        error_msg("Amount of arguments is invalid.", 1);
     
 
 

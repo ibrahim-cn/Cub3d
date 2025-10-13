@@ -12,9 +12,15 @@
 
 #include "cub3d.h"
 
-int main(char **arg, int ac)
+int main(int ac, char **arg)
 {
-    arg_controller(arg, ac);
-    
+    static t_cub3d	cub;
+	static t_map	map;
+
+	cub.map = &map;
+    if (ac != 2)
+        error_msg("Wrong number of arguments!\n", 1);
+    (cub.map)->name = arg[1];
+    if ()
 
 }
