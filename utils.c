@@ -17,3 +17,11 @@ void error_msg(char *message, int code)
     printf("Error! %s", message);
     exit(code);
 }
+
+int empty(char c)
+{
+    if (c == '\n' || c == ' ' || c == '\t')
+        return (1);
+    else
+        return (0);
+}

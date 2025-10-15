@@ -15,18 +15,33 @@
 
 
 #include "libft/libft.h"
+#include "get_next_line/get_next_line.h"
 #include <stdio.h>
 #include <fcntl.h>
+
+#define FLOOR '0'
+#define WALL '1'
 
 typedef struct s_map
 {
 	char	*name;
+	char	**map_lines;
 }	t_map;
 
 typedef struct s_cub3d
 {
 	t_map	*map;
 }	t_cub3d;
+
+typedef struct s_map_comp //map components
+{
+	char	*no;
+	char	*so;
+	char	*we;
+	char	*ea;
+	char	*f;
+	char	*c;
+}	t_map_comp;
 
 
 void	error_msg(char *message, int code);

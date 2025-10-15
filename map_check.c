@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_check.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/13 22:00:41 by aaydogdu          #+#    #+#             */
+/*   Updated: 2025/10/15 23:59:58 by aaydogdu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include <string.h>
 
@@ -22,3 +34,5 @@ void	check_map_exist(t_cub3d *cub)
 		error_msg("File could not found or opened\n", 2);
 	close(fd);
 }
+
+//copy_map fonksiyonu oluşturmak lazım. get_next_line ile okunacak
