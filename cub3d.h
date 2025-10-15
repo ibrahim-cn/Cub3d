@@ -14,8 +14,9 @@
 # define CUB3D_H
 
 
-#include <stdio.h>
 #include "libft/libft.h"
+#include <stdio.h>
+#include <fcntl.h>
 
 typedef struct s_map
 {
@@ -28,8 +29,9 @@ typedef struct s_cub3d
 }	t_cub3d;
 
 
-void error_msg(char *message, int code);
-void arg_controller(char **arg, int ac);
-
+void	error_msg(char *message, int code);
+void	arg_controller(char **arg, int ac);
+int		cub_check(char *file_name);
+void	check_map_exist(t_cub3d *cub);
 
 #endif

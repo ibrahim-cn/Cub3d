@@ -20,3 +20,5 @@ void arg_controller(char **arg, int ac)
 
 
 }
+//bu fonksiyon şimdilik böyle dursun, eğer function callingler main'e sığmazsa 
+//fonksiyon bölmek için kullanacağım.

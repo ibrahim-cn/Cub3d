@@ -20,7 +20,10 @@ int main(int ac, char **arg)
 	cub.map = &map;
     if (ac != 2)
         error_msg("Wrong number of arguments!\n", 1);
+    if (cub_check(arg[1]) == 1)
+        error_msg("Wrong Type of file\n", 2);
     (cub.map)->name = arg[1];
-    if ()
+    check_map_exist(&cub);
+    //if ()
 
 }

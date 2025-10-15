@@ -2,3 +2,5 @@ başlangıç.
 Kontrolleri yapacak fonksiyon yazımına başladım.
 
 -> map_check.c dosyası oluşturuldu ve harita kontrolleri eklendi (13/10/2025) 🎀
+->dizinde dosya mevcut mu ve sonu .cub ile mi bitiyor kontrolleri çalışıyor. Makefile
+eklendi çalıştırıp test edilebilir (14/10/2025)
