@@ -26,4 +26,6 @@ int main(int ac, char **arg)
     check_map_exist(&cub);
     //if ()
 
+
+    return (0);
 }
