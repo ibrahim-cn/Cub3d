@@ -18,17 +18,17 @@ all: $(NAME)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@make -C libft -silent
+	@make -C libft
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) 
 	@echo "✅ $(NAME) compiled"
 
 clean:
-	@make clean -C libft -silent
+	@make clean -C libft
 	@rm -f $(OBJ) $(GNL_OBJS)
 	@echo "🧹 bye bye object files"
 
 fclean:
-	@make fclean -C libft -silent
+	@make fclean -C libft
 	@rm -rf $(OBJ)
 	@rm -f $(NAME)
 	@echo "🧼 fully cleaned up"
