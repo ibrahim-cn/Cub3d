@@ -6,7 +6,7 @@
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/10/11 20:26:59 by ican             ###   ########.fr       */
+/*   Updated: 2025/10/18 15:03:24 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ typedef struct s_map
 {
 	char	*name;
 	char	**map_lines;
+
+	int		fd;
 }	t_map;
 
 typedef struct s_cub3d
@@ -41,6 +43,9 @@ typedef struct s_map_comp //map components
 	char	*ea;
 	char	*f;
 	char	*c;
+
+
+
 }	t_map_comp;
 
 
@@ -48,5 +53,9 @@ void	error_msg(char *message, int code);
 void	arg_controller(char **arg, int ac);
 int		cub_check(char *file_name);
 void	check_map_exist(t_cub3d *cub);
+
+
+
+void	copy_map(t_cub3d *cub);
 
 #endif
