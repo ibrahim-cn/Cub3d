@@ -27,11 +27,11 @@ int main(int ac, char **arg)
     copy_map(&cub);
     printf("%s",cub.map->map_lines[1]);
 
-/*     int i = 0;
+     int i = 0;
     while(cub.map->map_lines[i] != NULL ){
         printf("%s",cub.map->map_lines[i]);
         i++;
-    } */
-
+    }
+    free_map(&cub);
     return (0);
 }

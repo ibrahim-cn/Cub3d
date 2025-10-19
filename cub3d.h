@@ -30,10 +30,6 @@ typedef struct s_map
 	int		fd;
 }	t_map;
 
-typedef struct s_cub3d
-{
-	t_map	*map;
-}	t_cub3d;
 
 typedef struct s_map_comp //map components
 {
@@ -43,19 +39,23 @@ typedef struct s_map_comp //map components
 	char	*ea;
 	char	*f;
 	char	*c;
-
-
-
 }	t_map_comp;
 
+typedef struct s_cub3d
+{
+	t_map		*map;
+	t_map_comp	*comp;
+}	t_cub3d;
 
+//utils.c
 void	error_msg(char *message, int code);
+void	free_map(t_cub3d *cub);
+int		empty(char c);
+//controller.c
 void	arg_controller(char **arg, int ac);
+//map_check.c
 int		cub_check(char *file_name);
 void	check_map_exist(t_cub3d *cub);
-
-
-
 void	copy_map(t_cub3d *cub);
 
 #endif

@@ -12,16 +12,45 @@
 
 #include "cub3d.h"
 
-void error_msg(char *message, int code)
+void	error_msg(char *message, int code)
 {
-    printf("Error! %s", message);
-    exit(code);
+	printf("Error! %s", message);
+	exit(code);
 }
 
-int empty(char c)
+int	empty(char c)
 {
-    if (c == '\n' || c == ' ' || c == '\t')
-        return (1);
-    else
-        return (0);
+	if (c == '\n' || c == ' ' || c == '\t')
+		return (1);
+	else
+		return (0);
+}
+
+void	free_map(t_cub3d *cub)
+{
+	int	i;
+
+	i = 0;
+	while (cub->map->map_lines[i])
+	{
+		free(cub->map->map_lines[i]);
+		i++;
+	}
+	free(cub->map->map_lines);
+}
+
+void	free_comp(t_cub3d *cub)
+{
+	if (cub->comp->so)
+		free(cub->comp->so);
+	if (cub->comp->ea)
+		free(cub->comp->ea);
+	if (cub->comp->no)
+		free(cub->comp->no);
+	if (cub->comp->we)
+		free(cub->comp->we);
+	if (cub->comp->f)
+		free(cub->comp->f);
+	if (cub->comp->c)
+		free(cub->comp->c);
 }
