@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include "libft/libft.h"
 #include <string.h>
 
 int	cub_check(char *file_name)
@@ -80,3 +81,86 @@ void	copy_map(t_cub3d *cub)
 	
 // Son elemanı NULL yap
 }
+int	check_comp(char *line, t_map_comp *comp)
+{
+	//char	*ptr;
+
+	line = trim_spaces(line);
+	if (!line || !*line)
+		return (0);
+
+	// NORTH
+	if (!ft_strncmp(line, "NO", 2) && empty(line[2]) && !comp->no)
+		comp->no = extract_path(line + 2);
+	// SOUTH
+	else if (!ft_strncmp(line, "SO", 2) && empty(line[2]) && !comp->so)
+		comp->so = extract_path(line + 2);
+	// WEST
+	else if (!ft_strncmp(line, "WE", 2) && empty(line[2]) && !comp->we)
+		comp->we = extract_path(line + 2);
+	// EAST
+	else if (!ft_strncmp(line, "EA", 2) && empty(line[2]) && !comp->ea)
+		comp->ea = extract_path(line + 2);
+	// FLOOR
+	else if (line[0] == 'F' && empty(line[1]) && !comp->f)
+		comp->f = extract_path(line + 1);
+	// CEILING
+	else if (line[0] == 'C' && empty(line[1]) && !comp->c)
+		comp->c = extract_path(line + 1);
+	else
+		return (1); // tanınmayan ya da tekrar eden satır
+
+	return (0);
+}
+
+void	is_map_valid(char **map_lines, t_map_comp *comp)
+{
+	int	i;
+
+	i = 0;
+	while (map_lines[i])
+	{
+		if (check_comp(map_lines[i], comp))
+			error_msg("Missing or wrong components\n", 1);
+		i++;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+/* int	check_comp(char *line, t_map_comp *comp) //her çağırmada tek satır kontrol edecek
+{
+	while(1)
+	{
+		if (ft_strncmp(line, "SO", 2) == 0 && empty(line[2]) && !comp->so)
+			comp->so = ft_strdup(line);
+		else
+		 return (1);
+	}
+	return (1);
+}
+
+void	is_map_valid(t_cub3d *cub)
+{
+	//char	*line;
+	int	i;
+
+	i = 0;
+	while (cub->map->map_lines[i])
+	{
+		//cub->map->map_lines[i] = get_next_line(cub->map->fd, 0);
+		printf("%s\n", cub->map->map_lines[0]);
+		if (check_comp(cub->map->map_lines[i], cub->comp))
+			error_msg("Missing or wrong components\n", 1);
+		i++;
+	}
+	printf("Component found: %s \n", cub->comp->so);
+} */

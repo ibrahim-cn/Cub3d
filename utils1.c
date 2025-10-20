@@ -26,6 +26,28 @@ int	empty(char c)
 		return (0);
 }
 
+char	*trim_spaces(char *str)
+{
+	while (*str && empty(*str))
+		str++;
+	if (!*str)
+		return (NULL);
+	return (str);
+}
+
+char	*extract_path(char *line)
+{
+	char	*ptr;
+
+	ptr = line;
+	while (*ptr && !empty(*ptr))
+		ptr++;
+	ptr = trim_spaces(ptr);
+	if (!ptr || !*ptr)
+		return (NULL);
+	return (ft_strdup(ptr));
+}
+
 void	free_map(t_cub3d *cub)
 {
 	int	i;

@@ -16,8 +16,10 @@ int main(int ac, char **arg)
 {
     static t_cub3d	cub;
 	static t_map	map;
+    static t_map_comp comp; // zero-initialized
 
 	cub.map = &map;
+    cub.comp = &comp;
     if (ac != 2)
         error_msg("Wrong number of arguments!\n", 1);
     if (cub_check(arg[1]))
@@ -25,13 +27,17 @@ int main(int ac, char **arg)
     (cub.map)->name = arg[1];
     check_map_exist(&cub);
     copy_map(&cub);
-    printf("%s",cub.map->map_lines[1]);
+    is_map_valid(cub.map->map_lines, cub.comp);
 
-     int i = 0;
+    printf("NO: %s",cub.comp->no);
+
+    free_comp(&cub);
+    free_map(&cub);
+
+    /* int i = 0;
     while(cub.map->map_lines[i] != NULL ){
         printf("%s",cub.map->map_lines[i]);
         i++;
-    }
-    free_map(&cub);
+    } */
     return (0);
 }
