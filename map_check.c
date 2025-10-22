@@ -34,7 +34,7 @@ void	check_map_exist(t_cub3d *cub)
 	if (fd < 0)
 	{
 		close(fd);
-		error_msg("File could not found or opened\n", 2);
+		error_msg("File could not found or opened\n", 2, cub);
 	}
 	cub->map->fd = fd;
 }
@@ -60,12 +60,12 @@ void	copy_map(t_cub3d *cub)
 	close(cub->map->fd);
 	cub->map->fd = open(cub->map->name, O_RDONLY);
 	if (cub->map->fd < 0)
-		error_msg("File could not be reopened\n", 2);
+		error_msg("File could not be reopened\n", 2, cub);
 	
 	// map_lines için bellek ayır
 	cub->map->map_lines = (char **)malloc(sizeof(char *) * (line_count + 1));
 	if (!cub->map->map_lines)
-		error_msg("Memory allocation failed\n", 2);
+		error_msg("Memory allocation failed\n", 2, cub);
 	
 	// Şimdi satırları oku ve kaydet
 	i = 0;
@@ -81,47 +81,40 @@ void	copy_map(t_cub3d *cub)
 	
 // Son elemanı NULL yap
 }
+
 int	check_comp(char *line, t_map_comp *comp)
 {
-	//char	*ptr;
-
 	line = trim_spaces(line);
 	if (!line || !*line)
 		return (0);
-
-	// NORTH
+	if (check_tab(line))
+		return (1);
 	if (!ft_strncmp(line, "NO", 2) && empty(line[2]) && !comp->no)
 		comp->no = extract_path(line + 2);
-	// SOUTH
 	else if (!ft_strncmp(line, "SO", 2) && empty(line[2]) && !comp->so)
 		comp->so = extract_path(line + 2);
-	// WEST
 	else if (!ft_strncmp(line, "WE", 2) && empty(line[2]) && !comp->we)
 		comp->we = extract_path(line + 2);
-	// EAST
 	else if (!ft_strncmp(line, "EA", 2) && empty(line[2]) && !comp->ea)
 		comp->ea = extract_path(line + 2);
-	// FLOOR
 	else if (line[0] == 'F' && empty(line[1]) && !comp->f)
 		comp->f = extract_path(line + 1);
-	// CEILING
 	else if (line[0] == 'C' && empty(line[1]) && !comp->c)
 		comp->c = extract_path(line + 1);
 	else
-		return (1); // tanınmayan ya da tekrar eden satır
-
+		return (1);
 	return (0);
 }
 
-void	is_map_valid(char **map_lines, t_map_comp *comp)
+void	is_map_valid(char **map_lines, t_cub3d *cub)
 {
 	int	i;
 
 	i = 0;
 	while (map_lines[i])
 	{
-		if (check_comp(map_lines[i], comp))
-			error_msg("Missing or wrong components\n", 1);
+		if (check_comp(map_lines[i], cub->comp))
+			error_msg("Missing or wrong components\n", 1, cub);
 		i++;
 	}
 }

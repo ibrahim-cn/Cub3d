@@ -12,18 +12,33 @@
 
 #include "cub3d.h"
 
-void	error_msg(char *message, int code)
+void	error_msg(char *message, int code, t_cub3d *cub)
 {
 	printf("Error! %s", message);
+	free_map(cub);
+	free_comp(cub);
 	exit(code);
+}
+
+int	check_tab(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\t')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 int	empty(char c)
 {
-	if (c == '\n' || c == ' ' || c == '\t')
+	if (c == '\n' || c == ' ')
 		return (1);
-	else
-		return (0);
+	return (0);
 }
 
 char	*trim_spaces(char *str)

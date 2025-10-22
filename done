@@ -5,8 +5,11 @@ Kontrolleri yapacak fonksiyon yazımına başladım.
 ->dizinde dosya mevcut mu ve sonu .cub ile mi bitiyor kontrolleri çalışıyor. Makefile
 eklendi çalıştırıp test edilebilir (14/10/2025)
 -> 2 tane free fonksiyonu ekledim. (free_map ve free_comp)(19/10/2025)
-
+-> Components ataması yapan fonksiyonları yazdım (20/10/2025)
+-> error_msg fonsiyonunda haritayı freeleme fonksiyonlarını çağırdım ve t_cub3d *cub parametresini 
+ekledim. error_msg fonksiyonunun diğer çağırıldığı yerlerde de değişikliği uyguladım. (22/10/2025)
+-> Haritada tab ile karşılaşılması durumunu handleladım (22/10/2025)
 
 TO DO LIST:
--> Haritanın içinde aradığımız componentler var mı kontrolü, eğer varsa 
-structta tanımladığımız değişkenlere atama yapılması lazım
+-> haritanın duvarlarını kontrol etme, oyuncu ve oyuncunun konumunu kontrol eden,
+flood fill ile erişilebilir bir harita olup olmadığı kontrolü

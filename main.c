@@ -21,13 +21,13 @@ int main(int ac, char **arg)
 	cub.map = &map;
     cub.comp = &comp;
     if (ac != 2)
-        error_msg("Wrong number of arguments!\n", 1);
+        error_msg("Wrong number of arguments!\n", 1, &cub);
     if (cub_check(arg[1]))
-        error_msg("Wrong Type of file\n", 2);
+        error_msg("Wrong Type of file\n", 2, &cub);
     (cub.map)->name = arg[1];
     check_map_exist(&cub);
     copy_map(&cub);
-    is_map_valid(cub.map->map_lines, cub.comp);
+    is_map_valid(cub.map->map_lines, &cub);
 
     printf("NO: %s",cub.comp->no);
 
