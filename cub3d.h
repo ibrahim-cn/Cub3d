@@ -49,12 +49,13 @@ typedef struct s_cub3d
 
 //utils.c
 void	error_msg(char *message, int code, t_cub3d *cub);
-void	free_map(t_cub3d *cub);
-void	free_comp(t_cub3d *cub);
 int		check_tab(char *line);
 int		empty(char c);
 char	*trim_spaces(char *str);
 char	*extract_path(char *line);
+//utils.c
+void	free_map(t_cub3d *cub);
+void	free_comp(t_cub3d *cub);
 //controller.c
 void	arg_controller(char **arg, int ac);
 //map_check.c

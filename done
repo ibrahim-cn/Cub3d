@@ -12,4 +12,16 @@ ekledim. error_msg fonksiyonunun diğer çağırıldığı yerlerde de değişik
 
 TO DO LIST:
 -> haritanın duvarlarını kontrol etme, oyuncu ve oyuncunun konumunu kontrol eden,
-flood fill ile erişilebilir bir harita olup olmadığı kontrolü
+flood fill ile erişilebilir bir harita olup olmadığı kontrolü. Bunu da yaptığımızda artık raycasting
+bölümüne geçeceğiz.
+
+
+
+
+* Map parsing and validating
+* Player direction vector and camera vector
+* DDA Algorithm
+* Ray Casting implementation
+* Camera plane vector
+* Image scaling and transformation for MLX
+* Player movement and rotation
