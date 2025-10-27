@@ -47,6 +47,11 @@ typedef struct s_cub3d
 	t_map_comp	*comp;
 }	t_cub3d;
 
+typedef struct s_wall
+{
+
+}	t_wall;
+
 //utils.c
 void	error_msg(char *message, int code, t_cub3d *cub);
 int		check_tab(char *line);
