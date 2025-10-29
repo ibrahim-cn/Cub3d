@@ -6,7 +6,7 @@
 /*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/10/29 09:16:39 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/10/29 10:52:54 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ typedef struct s_map
 {
 	char	*name;
 	char	**map_lines;
-
+	int		height;
 	int		fd;
+	int		map_start_index;
+	int		map_height;
 }	t_map;
 
 
@@ -45,6 +47,9 @@ typedef struct s_cub3d
 {
 	t_map		*map;
 	t_map_comp	*comp;
+	int			player_x;
+	int			player_y;
+	char		player_dir;
 }	t_cub3d;
 
 typedef struct s_wall
@@ -69,5 +74,7 @@ void	check_map_exist(t_cub3d *cub);
 void	copy_map(t_cub3d *cub);
 int		check_comp(char *line, t_map_comp *comp);
 void	is_map_valid(char **map_lines, t_cub3d *cub);
+//map_check_walls.c
+void	check_map_layout(t_cub3d *cub);
 
 #endif

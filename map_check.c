@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 22:00:41 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/10/18 15:44:45 by ican             ###   ########.fr       */
+/*   Updated: 2025/10/29 11:24:09 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	copy_map(t_cub3d *cub)
 		i++;
 	}
 	cub->map->map_lines[i] = NULL;
+	cub->map->height = i;
 	
 // Son elemanı NULL yap
 }
@@ -86,7 +87,7 @@ int	check_comp(char *line, t_map_comp *comp)
 {
 	line = trim_spaces(line);
 	if (!line || !*line)
-		return (0);
+		return (0); // Boş satır, hata değil
 	if (check_tab(line))
 		return (1);
 	if (!ft_strncmp(line, "NO", 2) && empty(line[2]) && !comp->no)
@@ -98,25 +99,63 @@ int	check_comp(char *line, t_map_comp *comp)
 	else if (!ft_strncmp(line, "EA", 2) && empty(line[2]) && !comp->ea)
 		comp->ea = extract_path(line + 2);
 	else if (line[0] == 'F' && empty(line[1]) && !comp->f)
-		comp->f = extract_path(line + 1);
+		comp->f = extract_path(line + 1); // Not: extract_path'i renkleri de alacak şekilde güncellemen gerekecek
 	else if (line[0] == 'C' && empty(line[1]) && !comp->c)
-		comp->c = extract_path(line + 1);
+		comp->c = extract_path(line + 1); // Not: extract_path'i renkleri de alacak şekilde güncellemen gerekecek
+	else if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2) || \
+			 !ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2) || \
+			 line[0] == 'F' || line[0] == 'C')
+		return (1); // Hatalı format veya duplicate (tekrarlanan) bileşen
 	else
-		return (1);
+		return (2); // Bu bir bileşen değil, muhtemelen harita satırı
 	return (0);
+}
+
+static int	all_comps_found(t_map_comp *comp)
+{
+	if (!comp->no || !comp->so || !comp->we || !comp->ea || \
+		!comp->f || !comp->c)
+		return (0);
+	return (1);
 }
 
 void	is_map_valid(char **map_lines, t_cub3d *cub)
 {
 	int	i;
+	int	map_start_index;
+	int	comp_status;
 
 	i = 0;
+	map_start_index = -1;
 	while (map_lines[i])
 	{
-		if (check_comp(map_lines[i], cub->comp))
-			error_msg("Missing or wrong components\n", 1, cub);
+		comp_status = check_comp(map_lines[i], cub->comp);
+		if (comp_status == 1) // 1 = Hata
+			error_msg("Invalid component format\n", 1, cub);
+		else if (comp_status == 2) // 2 = Harita satırı
+		{
+			// Harita satırı bulduk, ama önce tüm bileşenler bulunmuş olmalı
+			if (!all_comps_found(cub->comp))
+				error_msg("Map line found before all components were set\n", 1, cub);
+			// Bu, haritanın başladığı ilk satır
+			if (map_start_index == -1)
+				map_start_index = i;
+		}
 		i++;
 	}
+	// Döngü bitti, son kontroller
+	if (!all_comps_found(cub->comp))
+		error_msg("Missing one or more map components\n", 1, cub);
+	if (map_start_index == -1)
+		error_msg("No map found in file\n", 1, cub);
+
+	// Harita başlangıç indeksini kaydet
+	cub->map->map_start_index = map_start_index;
+	// Haritanın gerçek yüksekliğini kaydet
+	cub->map->map_height = cub->map->height - map_start_index;
+	
+	// Şimdi harita içeriğini (duvarlar, oyuncu, kapalılık) kontrol et
+	check_map_layout(cub);
 }
 
 

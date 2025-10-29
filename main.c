@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:00:41 by ican              #+#    #+#             */
-/*   Updated: 2025/10/18 15:49:52 by ican             ###   ########.fr       */
+/*   Updated: 2025/10/29 12:15:26 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ int main(int ac, char **arg)
     copy_map(&cub);
     is_map_valid(cub.map->map_lines, &cub);
 
-    printf("NO: %s",cub.comp->no);
-
+    printf("EA: %s",cub.comp->ea);
+    
     free_comp(&cub);
     free_map(&cub);
-
-    /* int i = 0;
-    while(cub.map->map_lines[i] != NULL ){
-        printf("%s",cub.map->map_lines[i]);
-        i++;
-    } */
     return (0);
 }
+
+/*int i = 0;
+    while(i < map.height ){
+        printf("%s",cub.map->map_lines[i]);
+        i++;
+    }*/
