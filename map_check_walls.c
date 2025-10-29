@@ -67,8 +67,9 @@ static void	validate_chars_and_find_player(t_cub3d *cub)
 	while (i < cub->map->map_height)
 	{
 		char *line = cub->map->map_lines[start + i];
+		int line_len = (int)ft_strlen(line);
 		j = 0;
-		while (line[j] && line[j] != '\n')
+		while (j < line_len)
 		{
 			char c = line[j];
 			
@@ -80,7 +81,7 @@ static void	validate_chars_and_find_player(t_cub3d *cub)
 					error_msg("Map is open on an edge (top, bottom, left)\n", 1, cub);
 				
 				// Sağ kenar mı? (Satır sonu)
-				if (line[j + 1] == '\0' || line[j + 1] == '\n')
+				if (j == line_len - 1)
 					error_msg("Map is open on an edge (right side)\n", 1, cub);
 			}
 			
@@ -97,8 +98,8 @@ static void	validate_chars_and_find_player(t_cub3d *cub)
 				error_msg("Invalid character in map\n", 1, cub);
 			j++;
 		}
-		// Satırın tamamı boşluktan oluşuyorsa bu da bir hatadır (map_start_index'i bulduktan sonra)
-		if (j == 0 && line[j] == '\n') // Sadece newline olan boş satır
+		// Satırın tamamı boşsa hatadır (map_start_index'ten sonra)
+		if (line_len == 0)
 			error_msg("Empty line inside map definition\n", 1, cub);
 			
 		i++;

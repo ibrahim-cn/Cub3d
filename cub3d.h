@@ -30,6 +30,8 @@ typedef struct s_map
 	int		fd;
 	int		map_start_index;
 	int		map_height;
+	char	*one_line;
+
 }	t_map;
 
 
@@ -74,6 +76,12 @@ void	check_map_exist(t_cub3d *cub);
 void	copy_map(t_cub3d *cub);
 int		check_comp(char *line, t_map_comp *comp);
 void	is_map_valid(char **map_lines, t_cub3d *cub);
+
+
+void	all_free(t_cub3d *cub);
+void	eliminate_one_line(t_cub3d *cub);
+void	split_one_line(t_cub3d *cub);
+
 //map_check_walls.c
 void	check_map_layout(t_cub3d *cub);
 

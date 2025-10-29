@@ -55,6 +55,8 @@ void	copy_map(t_cub3d *cub)
 		free(line); // Geçici olarak okunan satırı serbest bırak
 		line_count++;
 	}
+	// get_next_line içindeki statik tamponu sıfırla
+	get_next_line(cub->map->fd, 1);
 	
 	// Dosyayı tekrar aç (fd'yi sıfırla)
 	close(cub->map->fd);
@@ -62,10 +64,15 @@ void	copy_map(t_cub3d *cub)
 	if (cub->map->fd < 0)
 		error_msg("File could not be reopened\n", 2, cub);
 	
-	// map_lines için bellek ayır
+	// map_lines için bellek ayır ve one_line'i başlat
 	cub->map->map_lines = (char **)malloc(sizeof(char *) * (line_count + 1));
 	if (!cub->map->map_lines)
 		error_msg("Memory allocation failed\n", 2, cub);
+	// one_line: boş string ile başla
+	cub->map->one_line = (char *)malloc(1);
+	if (!cub->map->one_line)
+		error_msg("Memory allocation failed\n", 2, cub);
+	cub->map->one_line[0] = '\0';
 	
 	// Şimdi satırları oku ve kaydet
 	i = 0;
@@ -75,10 +82,21 @@ void	copy_map(t_cub3d *cub)
 		if (line == NULL)
 			break;
 		cub->map->map_lines[i] = line;
+		// one_line içine ekle
+		{
+			char *joined;
+			joined = ft_strjoin(cub->map->one_line, line);
+			if (!joined)
+				error_msg("Memory allocation failed\n", 2, cub);
+			free(cub->map->one_line);
+			cub->map->one_line = joined;
+		}
 		i++;
 	}
 	cub->map->map_lines[i] = NULL;
-	cub->map->height = i;
+    cub->map->height = i;
+	// get_next_line statik tampon temizliği
+	get_next_line(cub->map->fd, 1);
 	
 // Son elemanı NULL yap
 }
