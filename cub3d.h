@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/10/18 15:03:24 by ican             ###   ########.fr       */
+/*   Updated: 2025/10/29 09:16:39 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		check_tab(char *line);
 int		empty(char c);
 char	*trim_spaces(char *str);
 char	*extract_path(char *line);
-//utils.c
+//utils1.c
 void	free_map(t_cub3d *cub);
 void	free_comp(t_cub3d *cub);
 //controller.c
