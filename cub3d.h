@@ -65,6 +65,8 @@ int		check_tab(char *line);
 int		empty(char c);
 char	*trim_spaces(char *str);
 char	*extract_path(char *line);
+char	*extract_color(char *line, t_cub3d *cub);
+void	validate_texture_file(char *path, t_cub3d *cub);
 //utils1.c
 void	free_map(t_cub3d *cub);
 void	free_comp(t_cub3d *cub);
@@ -74,7 +76,7 @@ void	arg_controller(char **arg, int ac);
 int		cub_check(char *file_name);
 void	check_map_exist(t_cub3d *cub);
 void	copy_map(t_cub3d *cub);
-int		check_comp(char *line, t_map_comp *comp);
+int		check_comp(char *line, t_map_comp *comp, t_cub3d *cub);
 void	is_map_valid(char **map_lines, t_cub3d *cub);
 
 

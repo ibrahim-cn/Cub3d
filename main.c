@@ -40,8 +40,53 @@ void eliminate_one_line(t_cub3d *cub)
 void split_one_line(t_cub3d *cub)
 {
 	char	**lines;
-
-	lines = ft_split(cub->map->one_line, '\n');
+	char	*str;
+	int		count;
+	int		i;
+	
+	// Önce satır sayısını say (boş satırlar dahil)
+	count = 0;
+	str = cub->map->one_line;
+	while (*str)
+	{
+		if (*str == '\n')
+			count++;
+		str++;
+	}
+	// Son satırı da ekle (eğer newline ile bitmiyorsa)
+	if (cub->map->one_line[ft_strlen(cub->map->one_line) - 1] != '\n')
+		count++;
+	
+	// Bellek ayır
+	lines = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!lines)
+		error_msg("Memory allocation failed\n", 2, cub);
+	
+	// Satırları parse et (boş satırlar dahil)
+	i = 0;
+	str = cub->map->one_line;
+	while (*str && i < count)
+	{
+		char	*start;
+		int		len;
+		
+		start = str;
+		len = 0;
+		// Newline'a kadar veya string sonuna kadar oku
+		while (*str && *str != '\n')
+		{
+			len++;
+			str++;
+		}
+		// Satırı kopyala (boş satırlar da dahil)
+		lines[i] = ft_substr(start, 0, len);
+		if (!lines[i])
+			error_msg("Memory allocation failed\n", 2, cub);
+		i++;
+		if (*str == '\n')
+			str++; // Newline'ı atla
+	}
+	lines[i] = NULL;
 	cub->map->map_lines = lines;
 }
 

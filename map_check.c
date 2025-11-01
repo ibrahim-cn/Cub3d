@@ -101,7 +101,7 @@ void	copy_map(t_cub3d *cub)
 // Son elemanı NULL yap
 }
 
-int	check_comp(char *line, t_map_comp *comp)
+int	check_comp(char *line, t_map_comp *comp, t_cub3d *cub)
 {
 	line = trim_spaces(line);
 	if (!line || !*line)
@@ -109,17 +109,33 @@ int	check_comp(char *line, t_map_comp *comp)
 	if (check_tab(line))
 		return (1);
 	if (!ft_strncmp(line, "NO", 2) && empty(line[2]) && !comp->no)
+	{
 		comp->no = extract_path(line + 2);
+		if (comp->no)
+			validate_texture_file(comp->no, cub);
+	}
 	else if (!ft_strncmp(line, "SO", 2) && empty(line[2]) && !comp->so)
+	{
 		comp->so = extract_path(line + 2);
+		if (comp->so)
+			validate_texture_file(comp->so, cub);
+	}
 	else if (!ft_strncmp(line, "WE", 2) && empty(line[2]) && !comp->we)
+	{
 		comp->we = extract_path(line + 2);
+		if (comp->we)
+			validate_texture_file(comp->we, cub);
+	}
 	else if (!ft_strncmp(line, "EA", 2) && empty(line[2]) && !comp->ea)
+	{
 		comp->ea = extract_path(line + 2);
+		if (comp->ea)
+			validate_texture_file(comp->ea, cub);
+	}
 	else if (line[0] == 'F' && empty(line[1]) && !comp->f)
-		comp->f = extract_path(line + 1); // Not: extract_path'i renkleri de alacak şekilde güncellemen gerekecek
+		comp->f = extract_color(line + 1, cub); // RGB color parsing
 	else if (line[0] == 'C' && empty(line[1]) && !comp->c)
-		comp->c = extract_path(line + 1); // Not: extract_path'i renkleri de alacak şekilde güncellemen gerekecek
+		comp->c = extract_color(line + 1, cub); // RGB color parsing
 	else if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2) || \
 			 !ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2) || \
 			 line[0] == 'F' || line[0] == 'C')
@@ -142,12 +158,14 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	int	i;
 	int	map_start_index;
 	int	comp_status;
+	int	map_end_index;
 
 	i = 0;
 	map_start_index = -1;
+	map_end_index = -1;
 	while (map_lines[i])
 	{
-		comp_status = check_comp(map_lines[i], cub->comp);
+		comp_status = check_comp(map_lines[i], cub->comp, cub);
 		if (comp_status == 1) // 1 = Hata
 			error_msg("Invalid component format\n", 1, cub);
 		else if (comp_status == 2) // 2 = Harita satırı
@@ -158,6 +176,18 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 			// Bu, haritanın başladığı ilk satır
 			if (map_start_index == -1)
 				map_start_index = i;
+			// Haritanın bittiği son satır (son harita satırını bul)
+			// Not: Boş satırlardan sonra tekrar harita gelirse, bu da haritanın devamıdır
+			map_end_index = i;
+		}
+		// Eğer harita başladıysa ve boş satır görürsek
+		else if (comp_status == 0 && map_start_index != -1)
+		{
+			// Boş satır: Eğer map_end_index set edilmişse (yani harita karakterleri görüldüyse)
+			// bu harita içindeki boş satırdır - kontrol için map_end_index'i genişlet
+			// Böylece boş satır da kontrol edilecek
+			if (map_end_index != -1)
+				map_end_index = i; // Boş satırı da harita aralığına dahil et (kontrol için)
 		}
 		i++;
 	}
@@ -169,8 +199,41 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 
 	// Harita başlangıç indeksini kaydet
 	cub->map->map_start_index = map_start_index;
-	// Haritanın gerçek yüksekliğini kaydet
-	cub->map->map_height = cub->map->height - map_start_index;
+	// Haritanın gerçek yüksekliğini kaydet (map_end_index dahil)
+	cub->map->map_height = map_end_index - map_start_index + 1;
+	
+	// Harita içinde boş satır var mı kontrol et
+	// Component'ler ile harita arasındaki boş satırlar zaten izin veriliyor (comp_status == 0)
+	// Ama harita başladıktan sonra (map_start_index'ten sonra) boş satır olamaz
+	i = map_start_index;
+	while (i <= map_end_index)
+	{
+		char	*trimmed;
+		int		is_empty;
+		
+		// Satırın boş olup olmadığını kontrol et
+		trimmed = trim_spaces(map_lines[i]);
+		is_empty = (!trimmed || !*trimmed);
+		
+		// Eğer satır boşsa, bu harita içindeki boş satırdır - HATA
+		if (is_empty)
+			error_msg("Empty line inside map definition\n", 1, cub);
+		i++;
+	}
+	
+	// Harita sonrasında geçersiz içerik var mı kontrol et
+	// Harita sonrasında sadece boş satırlar olabilir, başka bir şey olmamalı
+	i = map_end_index + 1;
+	while (map_lines[i])
+	{
+		char	*trimmed;
+		
+		trimmed = trim_spaces(map_lines[i]);
+		// Eğer harita sonrasında boş olmayan bir satır varsa, bu geçersizdir
+		if (trimmed && *trimmed)
+			error_msg("Invalid content after map definition\n", 1, cub);
+		i++;
+	}
 	
 	// Şimdi harita içeriğini (duvarlar, oyuncu, kapalılık) kontrol et
 	check_map_layout(cub);
