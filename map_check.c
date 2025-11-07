@@ -166,6 +166,16 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	while (map_lines[i])
 	{
 		comp_status = check_comp(map_lines[i], cub->comp, cub);
+		// Harita başlamadan önce yalnız başına '0' kontrolü
+		if (map_start_index == -1 && comp_status == 2)
+		{
+			char	*trimmed;
+			
+			trimmed = trim_spaces(map_lines[i]);
+			// Eğer satır trim edildikten sonra sadece "0" içeriyorsa, bu bir hatadır
+			if (trimmed && ft_strlen(trimmed) == 1 && trimmed[0] == '0')
+				error_msg("Standalone '0' found outside map definition\n", 1, cub);
+		}
 		if (comp_status == 1) // 1 = Hata
 			error_msg("Invalid component format\n", 1, cub);
 		else if (comp_status == 2) // 2 = Harita satırı
@@ -239,41 +249,42 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	check_map_layout(cub);
 }
 
-
-
-
-
-
-
-
-
-
-
-/* int	check_comp(char *line, t_map_comp *comp) //her çağırmada tek satır kontrol edecek
+static int	parse_rgb(char *line)
 {
-	while(1)
-	{
-		if (ft_strncmp(line, "SO", 2) == 0 && empty(line[2]) && !comp->so)
-			comp->so = ft_strdup(line);
-		else
-		 return (1);
-	}
-	return (1);
+    // Bu fonksiyon tek bir renk değerini (örn: "220") kontrol eder
+    int i = 0;
+    while (line[i] && line[i] == ' ') // Baştaki boşlukları atla
+        i++;
+    if (!line[i]) return (-1); // Sadece boşluksa hata
+    int j = i;
+    while (line[j] && ft_isdigit(line[j])) // Rakamları kontrol et
+        j++;
+    while (line[j] && line[j] == ' ') // Sondaki boşlukları atla
+        j++;
+    if (line[j] != '\0') return (-1); // Rakam ve boşluk dışında bir şey varsa hata
+    int val = ft_atoi(line + i);
+    if (val < 0 || val > 255) return (-1); // 0-255 aralığı kontrolü
+    return (val);
 }
 
-void	is_map_valid(t_cub3d *cub)
+void validate_colors(t_cub3d *cub)
 {
-	//char	*line;
-	int	i;
+    char **rgb;
+    int i;
 
-	i = 0;
-	while (cub->map->map_lines[i])
-	{
-		//cub->map->map_lines[i] = get_next_line(cub->map->fd, 0);
-		printf("%s\n", cub->map->map_lines[0]);
-		if (check_comp(cub->map->map_lines[i], cub->comp))
-			error_msg("Missing or wrong components\n", 1);
-		i++;
-	}
-	printf("Component found: %s \n", cub->comp->so);
-} */
+    // Zemin (Floor) Rengi Kontrolü
+    rgb = ft_split(cub->comp->f, ',');
+    if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3]) // Tam 3 parça olmalı
+        error_msg("Invalid floor color format\n", 1, cub); // rgb'yi free'lemeyi unutma!
+    i = -1;
+    while (++i < 3)
+    {
+        cub->comp->floor_color[i] = parse_rgb(rgb[i]);
+        if (cub->comp->floor_color[i] == -1)
+             error_msg("Invalid floor color value (0-255 only)\n", 1, cub); // rgb'yi free'le!
+    }
+    // rgb dizisini free'le (libft'inde ft_free_split gibi bir şey varsa kullan)
+
+    // Tavan (Ceiling) Rengi Kontrolü
+    // (Aynı işlemi cub->comp->c ve cub->comp->ceiling_color için tekrarla)
+}

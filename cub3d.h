@@ -43,6 +43,8 @@ typedef struct s_map_comp //map components
 	char	*ea;
 	char	*f;
 	char	*c;
+	int		floor_color[3];
+	int		ceiling_color[3];
 }	t_map_comp;
 
 typedef struct s_cub3d

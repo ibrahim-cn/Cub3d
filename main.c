@@ -84,7 +84,7 @@ void split_one_line(t_cub3d *cub)
 			error_msg("Memory allocation failed\n", 2, cub);
 		i++;
 		if (*str == '\n')
-			str++; // Newline'ı atla
+			str++;
 	}
 	lines[i] = NULL;
 	cub->map->map_lines = lines;
@@ -115,7 +115,7 @@ int main(int ac, char **arg)
 		i++;
 	}
 	//is_map_valid(cub.map->map_lines, &cub);
-	//printf("NO: %s\n", cub.comp->no);
+	printf("NO: %s\n", cub.comp->no);
 	all_free(&cub);
 	return (0);
 }
