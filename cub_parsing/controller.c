@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 void arg_controller(char **arg, int ac)
 {
-    if (ac != 2)
-        //error_msg("Amount of arguments is invalid.", 1);
-    
-
-
+	(void)arg;
+	if (ac != 2)
+	{
+		//error_msg("Amount of arguments is invalid.", 1);
+	}
 }
 //bu fonksiyon şimdilik böyle dursun, eğer function callingler main'e sığmazsa 
 //fonksiyon bölmek için kullanacağım. oke.

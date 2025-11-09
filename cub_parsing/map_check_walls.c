@@ -6,11 +6,11 @@
 /*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 10:46:27 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/10/29 12:53:49 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:39:36 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 static int	is_empty(t_cub3d *cub, int y, int x)
 {
@@ -93,8 +93,8 @@ static void	validate_chars_and_find_player(t_cub3d *cub)
 			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 			{
 				player_count++;
-				cub->player_x = j;
-				cub->player_y = i; 
+				cub->player.pos_x = j;
+				cub->player.pos_y = i; 
 				cub->player_dir = c;
 			}
 			// 4. Geçersiz Karakter Kontrolü
@@ -204,7 +204,7 @@ void	check_map_layout(t_cub3d *cub)
 
 	// 3. Flood-fill'i oyuncunun başladığı yerden başlat
 	// Not: player_y, kopyalanmış haritaya (0'dan başlayan) göre ayarlandı
-	flood_fill(cub, map_copy, cub->player_y, cub->player_x);
+	flood_fill(cub, map_copy, cub->player.pos_y, cub->player.pos_x);
 
 	// 4. Kontrol başarılıysa, kopya haritayı temizle
 	free_map_copy(map_copy);
