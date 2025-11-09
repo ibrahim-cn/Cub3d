@@ -44,6 +44,19 @@ void split_one_line(t_cub3d *cub)
 	int		count;
 	int		i;
 	
+	// Eğer map_lines zaten varsa, önce onu ve içindeki satırları serbest bırak
+	if (cub->map->map_lines)
+	{
+		i = 0;
+		while (cub->map->map_lines[i])
+		{
+			free(cub->map->map_lines[i]);
+			i++;
+		}
+		free(cub->map->map_lines);
+		cub->map->map_lines = NULL;
+	}
+	
 	// Önce satır sayısını say (boş satırlar dahil)
 	count = 0;
 	str = cub->map->one_line;
