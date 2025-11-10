@@ -37,42 +37,59 @@ void	check_map_exist(t_cub3d *cub)
 	cub->map->fd = fd;
 }
 
-void	copy_map(t_cub3d *cub)
+static int	count_file_lines(t_cub3d *cub)
 {
 	char	*line;
-	int		i;
 	int		line_count;
 
-	// Önce dosyadaki satır sayısını say
 	line_count = 0;
 	while (1)
 	{
 		line = get_next_line(cub->map->fd, 0);
 		if (line == NULL)
 			break;
-		free(line); // Geçici olarak okunan satırı serbest bırak
+		free(line);
 		line_count++;
 	}
-	// get_next_line içindeki statik tamponu sıfırla
 	get_next_line(cub->map->fd, 1);
-	
-	// Dosyayı tekrar aç (fd'yi sıfırla)
+	return (line_count);
+}
+
+static void	reopen_file(t_cub3d *cub)
+{
 	close(cub->map->fd);
 	cub->map->fd = open(cub->map->name, O_RDONLY);
 	if (cub->map->fd < 0)
 		error_msg("File could not be reopened\n", 2, cub);
-	
-	// map_lines için bellek ayır ve one_line'i başlat
+}
+
+static void	allocate_map_memory(t_cub3d *cub, int line_count)
+{
 	cub->map->map_lines = (char **)malloc(sizeof(char *) * (line_count + 1));
 	if (!cub->map->map_lines)
 		error_msg("Memory allocation failed\n", 2, cub);
-	// one_line: boş string ile başla
 	cub->map->one_line = (char *)malloc(1);
 	if (!cub->map->one_line)
 		error_msg("Memory allocation failed\n", 2, cub);
 	cub->map->one_line[0] = '\0';
-	
-	// Şimdi satırları oku ve kaydet
+}
+
+static void	append_line_to_one_line(t_cub3d *cub, char *line)
+{
+	char	*joined;
+
+	joined = ft_strjoin(cub->map->one_line, line);
+	if (!joined)
+		error_msg("Memory allocation failed\n", 2, cub);
+	free(cub->map->one_line);
+	cub->map->one_line = joined;
+}
+
+static void	read_and_store_lines(t_cub3d *cub)
+{
+	char	*line;
+	int		i;
+
 	i = 0;
 	while (1)
 	{
@@ -80,67 +97,87 @@ void	copy_map(t_cub3d *cub)
 		if (line == NULL)
 			break;
 		cub->map->map_lines[i] = line;
-		// one_line içine ekle
-		{
-			char *joined;
-			joined = ft_strjoin(cub->map->one_line, line);
-			if (!joined)
-				error_msg("Memory allocation failed\n", 2, cub);
-			free(cub->map->one_line);
-			cub->map->one_line = joined;
-		}
+		append_line_to_one_line(cub, line);
 		i++;
 	}
 	cub->map->map_lines[i] = NULL;
-    cub->map->height = i;
-	// get_next_line statik tampon temizliği
+	cub->map->height = i;
 	get_next_line(cub->map->fd, 1);
-	
-// Son elemanı NULL yap
+}
+
+void	copy_map(t_cub3d *cub)
+{
+	int		line_count;
+
+	line_count = count_file_lines(cub);
+	reopen_file(cub);
+	allocate_map_memory(cub, line_count);
+	read_and_store_lines(cub);
+}
+
+static int	set_texture_path(char **texture_ptr, char *line, t_cub3d *cub)
+{
+	*texture_ptr = extract_path(line);
+	if (*texture_ptr)
+		validate_texture_file(*texture_ptr, cub);
+	return (0);
+}
+
+static int	process_texture_component(char *line, t_map_comp *comp, t_cub3d *cub)
+{
+	if (!ft_strncmp(line, "NO", 2) && empty(line[2]) && !comp->no)
+		return (set_texture_path(&comp->no, line + 2, cub));
+	else if (!ft_strncmp(line, "SO", 2) && empty(line[2]) && !comp->so)
+		return (set_texture_path(&comp->so, line + 2, cub));
+	else if (!ft_strncmp(line, "WE", 2) && empty(line[2]) && !comp->we)
+		return (set_texture_path(&comp->we, line + 2, cub));
+	else if (!ft_strncmp(line, "EA", 2) && empty(line[2]) && !comp->ea)
+		return (set_texture_path(&comp->ea, line + 2, cub));
+	return (-1);
+}
+
+static int	process_color_component(char *line, t_map_comp *comp, t_cub3d *cub)
+{
+	if (line[0] == 'F' && empty(line[1]) && !comp->f)
+	{
+		comp->f = extract_color(line + 1, cub);
+		return (0);
+	}
+	else if (line[0] == 'C' && empty(line[1]) && !comp->c)
+	{
+		comp->c = extract_color(line + 1, cub);
+		return (0);
+	}
+	return (-1);
+}
+
+static int	check_duplicate_component(char *line)
+{
+	if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2) || \
+		!ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2) || \
+		line[0] == 'F' || line[0] == 'C')
+		return (1);
+	return (0);
 }
 
 int	check_comp(char *line, t_map_comp *comp, t_cub3d *cub)
 {
+	int	result;
+
 	line = trim_spaces(line);
 	if (!line || !*line)
-		return (0); // Boş satır, hata değil
+		return (0);
 	if (check_tab(line))
 		return (1);
-	if (!ft_strncmp(line, "NO", 2) && empty(line[2]) && !comp->no)
-	{
-		comp->no = extract_path(line + 2);
-		if (comp->no)
-			validate_texture_file(comp->no, cub);
-	}
-	else if (!ft_strncmp(line, "SO", 2) && empty(line[2]) && !comp->so)
-	{
-		comp->so = extract_path(line + 2);
-		if (comp->so)
-			validate_texture_file(comp->so, cub);
-	}
-	else if (!ft_strncmp(line, "WE", 2) && empty(line[2]) && !comp->we)
-	{
-		comp->we = extract_path(line + 2);
-		if (comp->we)
-			validate_texture_file(comp->we, cub);
-	}
-	else if (!ft_strncmp(line, "EA", 2) && empty(line[2]) && !comp->ea)
-	{
-		comp->ea = extract_path(line + 2);
-		if (comp->ea)
-			validate_texture_file(comp->ea, cub);
-	}
-	else if (line[0] == 'F' && empty(line[1]) && !comp->f)
-		comp->f = extract_color(line + 1, cub); // RGB color parsing
-	else if (line[0] == 'C' && empty(line[1]) && !comp->c)
-		comp->c = extract_color(line + 1, cub); // RGB color parsing
-	else if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2) || \
-			 !ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2) || \
-			 line[0] == 'F' || line[0] == 'C')
-		return (1); // Hatalı format veya duplicate (tekrarlanan) bileşen
-	else
-		return (2); // Bu bir bileşen değil, muhtemelen harita satırı
-	return (0);
+	result = process_texture_component(line, comp, cub);
+	if (result == 0)
+		return (0);
+	result = process_color_component(line, comp, cub);
+	if (result == 0)
+		return (0);
+	if (check_duplicate_component(line))
+		return (1);
+	return (2);
 }
 
 static int	all_comps_found(t_map_comp *comp)
@@ -151,99 +188,99 @@ static int	all_comps_found(t_map_comp *comp)
 	return (1);
 }
 
-void	is_map_valid(char **map_lines, t_cub3d *cub)
+static void	check_standalone_zero(char *line, t_cub3d *cub)
+{
+	char	*trimmed;
+
+	trimmed = trim_spaces(line);
+	if (trimmed && ft_strlen(trimmed) == 1 && trimmed[0] == '0')
+		error_msg("Standalone '0' found outside map definition\n", 1, cub);
+}
+
+static void	process_map_line(char **map_lines, int i, int comp_status, \
+		int *map_start_index, int *map_end_index, t_cub3d *cub)
+{
+	if (comp_status == 1)
+		error_msg("Invalid component format\n", 1, cub);
+	else if (comp_status == 2)
+	{
+		if (!all_comps_found(cub->comp))
+			error_msg("Map line found before all components were set\n", 1, cub);
+		if (*map_start_index == -1)
+			*map_start_index = i;
+		*map_end_index = i;
+	}
+	else if (comp_status == 0 && *map_start_index != -1)
+	{
+		if (*map_end_index != -1)
+			*map_end_index = i;
+	}
+}
+
+static void	find_map_bounds(char **map_lines, int *start, int *end, t_cub3d *cub)
 {
 	int	i;
-	int	map_start_index;
 	int	comp_status;
-	int	map_end_index;
 
 	i = 0;
-	map_start_index = -1;
-	map_end_index = -1;
+	*start = -1;
+	*end = -1;
 	while (map_lines[i])
 	{
 		comp_status = check_comp(map_lines[i], cub->comp, cub);
-		// Harita başlamadan önce yalnız başına '0' kontrolü
-		if (map_start_index == -1 && comp_status == 2)
-		{
-			char	*trimmed;
-			
-			trimmed = trim_spaces(map_lines[i]);
-			// Eğer satır trim edildikten sonra sadece "0" içeriyorsa, bu bir hatadır
-			if (trimmed && ft_strlen(trimmed) == 1 && trimmed[0] == '0')
-				error_msg("Standalone '0' found outside map definition\n", 1, cub);
-		}
-		if (comp_status == 1) // 1 = Hata
-			error_msg("Invalid component format\n", 1, cub);
-		else if (comp_status == 2) // 2 = Harita satırı
-		{
-			// Harita satırı bulduk, ama önce tüm bileşenler bulunmuş olmalı
-			if (!all_comps_found(cub->comp))
-				error_msg("Map line found before all components were set\n", 1, cub);
-			// Bu, haritanın başladığı ilk satır
-			if (map_start_index == -1)
-				map_start_index = i;
-			// Haritanın bittiği son satır (son harita satırını bul)
-			// Not: Boş satırlardan sonra tekrar harita gelirse, bu da haritanın devamıdır
-			map_end_index = i;
-		}
-		// Eğer harita başladıysa ve boş satır görürsek
-		else if (comp_status == 0 && map_start_index != -1)
-		{
-			// Boş satır: Eğer map_end_index set edilmişse (yani harita karakterleri görüldüyse)
-			// bu harita içindeki boş satırdır - kontrol için map_end_index'i genişlet
-			// Böylece boş satır da kontrol edilecek
-			if (map_end_index != -1)
-				map_end_index = i; // Boş satırı da harita aralığına dahil et (kontrol için)
-		}
+		if (*start == -1 && comp_status == 2)
+			check_standalone_zero(map_lines[i], cub);
+		process_map_line(map_lines, i, comp_status, start, end, cub);
 		i++;
 	}
-	// Döngü bitti, son kontroller
 	if (!all_comps_found(cub->comp))
 		error_msg("Missing one or more map components\n", 1, cub);
-	if (map_start_index == -1)
+	if (*start == -1)
 		error_msg("No map found in file\n", 1, cub);
+}
 
-	// Harita başlangıç indeksini kaydet
-	cub->map->map_start_index = map_start_index;
-	// Haritanın gerçek yüksekliğini kaydet (map_end_index dahil)
-	cub->map->map_height = map_end_index - map_start_index + 1;
-	
-	// Harita içinde boş satır var mı kontrol et
-	// Component'ler ile harita arasındaki boş satırlar zaten izin veriliyor (comp_status == 0)
-	// Ama harita başladıktan sonra (map_start_index'ten sonra) boş satır olamaz
-	i = map_start_index;
-	while (i <= map_end_index)
+static void	check_empty_lines_in_map(char **map_lines, int start, int end, t_cub3d *cub)
+{
+	int		i;
+	char	*trimmed;
+	int		is_empty;
+
+	i = start;
+	while (i <= end)
 	{
-		char	*trimmed;
-		int		is_empty;
-		
-		// Satırın boş olup olmadığını kontrol et
 		trimmed = trim_spaces(map_lines[i]);
 		is_empty = (!trimmed || !*trimmed);
-		
-		// Eğer satır boşsa, bu harita içindeki boş satırdır - HATA
 		if (is_empty)
 			error_msg("Empty line inside map definition\n", 1, cub);
 		i++;
 	}
-	
-	// Harita sonrasında geçersiz içerik var mı kontrol et
-	// Harita sonrasında sadece boş satırlar olabilir, başka bir şey olmamalı
-	i = map_end_index + 1;
+}
+
+static void	check_content_after_map(char **map_lines, int end, t_cub3d *cub)
+{
+	int		i;
+	char	*trimmed;
+
+	i = end + 1;
 	while (map_lines[i])
 	{
-		char	*trimmed;
-		
 		trimmed = trim_spaces(map_lines[i]);
-		// Eğer harita sonrasında boş olmayan bir satır varsa, bu geçersizdir
 		if (trimmed && *trimmed)
 			error_msg("Invalid content after map definition\n", 1, cub);
 		i++;
 	}
-	
-	// Şimdi harita içeriğini (duvarlar, oyuncu, kapalılık) kontrol et
+}
+
+void	is_map_valid(char **map_lines, t_cub3d *cub)
+{
+	int	map_start_index;
+	int	map_end_index;
+
+	find_map_bounds(map_lines, &map_start_index, &map_end_index, cub);
+	cub->map->map_start_index = map_start_index;
+	cub->map->map_height = map_end_index - map_start_index + 1;
+	check_empty_lines_in_map(map_lines, map_start_index, map_end_index, cub);
+	check_content_after_map(map_lines, map_end_index, cub);
 	check_map_layout(cub);
 }
 

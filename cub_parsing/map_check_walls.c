@@ -31,11 +31,9 @@ static int	is_empty(t_cub3d *cub, int y, int x)
 	if (!map[start + y]) return (1);
 	if (x < 0 || (int)ft_strlen(map[start + y]) <= x)
 		return (1); // Satır sonu veya öncesi = boş kabul edilir
-
 	// 3. Karakter kontrolü
 	if (map[start + y][x] == ' ' || map[start + y][x] == '\n' || map[start + y][x] == '\0')
 		return (1);
-
 	return (0); // Dolu (0, 1, N, S, E, W)
 }
 
@@ -62,49 +60,49 @@ static void	check_stray_wall(t_cub3d *cub, int y, int x)
 	}
 }
 
+static int	process_map_char(t_cub3d *cub, char c, int y, int x)
+{
+	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		check_map_closed(cub, y, x);
+	else if (c == '1')
+		check_stray_wall(cub, y, x);
+	else if (c != ' ')
+		error_msg("Invalid character in map\n", 1, cub);
+	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+	{
+		cub->player.pos_x = x;
+		cub->player.pos_y = y;
+		cub->player_dir = c;
+		return (1);
+	}
+	return (0);
+}
+
+static void	check_empty_line_in_map(char *line, int j, t_cub3d *cub)
+{
+	if (j == 0 && (line[j] == '\n' || line[j] == '\0'))
+		error_msg("Empty line inside map definition\n", 1, cub);
+}
+
 static void	validate_chars_and_find_player(t_cub3d *cub)
 {
 	int		i;
 	int		j;
 	int		player_count;
-	int		start;
+	char	*line;
 
 	player_count = 0;
-	start = cub->map->map_start_index;
 	i = 0;
 	while (i < cub->map->map_height)
 	{
-		char *line = cub->map->map_lines[start + i];
+		line = cub->map->map_lines[cub->map->map_start_index + i];
 		j = 0;
 		while (line[j] && line[j] != '\n')
 		{
-			char c = line[j];
-			// 1. ZEMİN veya OYUNCU için KAPALILIK kontrolü (check_map_closed)
-			if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
-			{
-				check_map_closed(cub, i, j); // <-- BURASI DEĞİŞTİ
-			}
-			// 2. DUVAR için BAŞIBOŞLUK kontrolü (check_stray_wall)
-			else if (c == '1')
-			{
-				check_stray_wall(cub, i, j); // <-- BURASI EKLENDİ
-			}
-			// 3. Oyuncu tespiti
-			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-			{
-				player_count++;
-				cub->player.pos_x = j;
-				cub->player.pos_y = i; 
-				cub->player_dir = c;
-			}
-			// 4. Geçersiz Karakter Kontrolü
-			else if (c != '0' && c != '1' && c != ' ')
-				error_msg("Invalid character in map\n", 1, cub);
+			player_count += process_map_char(cub, line[j], i, j);
 			j++;
 		}
-		// Harita içinde boş satır kontrolü (Sadece \n veya \0 içeren satır)
-		if (j == 0 && (line[j] == '\n' || line[j] == '\0'))
-			error_msg("Empty line inside map definition\n", 1, cub);
+		check_empty_line_in_map(line, j, cub);
 		i++;
 	}
 	if (player_count != 1)

@@ -37,61 +37,58 @@ void eliminate_one_line(t_cub3d *cub)
 	split_one_line(cub);
 }
 
-void split_one_line(t_cub3d *cub)
+static void	free_existing_map_lines(t_cub3d *cub)
 {
-	char	**lines;
+	int	i;
+
+	if (!cub->map->map_lines)
+		return;
+	i = 0;
+	while (cub->map->map_lines[i])
+	{
+		free(cub->map->map_lines[i]);
+		i++;
+	}
+	free(cub->map->map_lines);
+	cub->map->map_lines = NULL;
+}
+
+static int	count_lines_in_one_line(char *one_line)
+{
 	char	*str;
 	int		count;
-	int		i;
-	
-	// Eğer map_lines zaten varsa, önce onu ve içindeki satırları serbest bırak
-	if (cub->map->map_lines)
-	{
-		i = 0;
-		while (cub->map->map_lines[i])
-		{
-			free(cub->map->map_lines[i]);
-			i++;
-		}
-		free(cub->map->map_lines);
-		cub->map->map_lines = NULL;
-	}
-	
-	// Önce satır sayısını say (boş satırlar dahil)
+
 	count = 0;
-	str = cub->map->one_line;
+	str = one_line;
 	while (*str)
 	{
 		if (*str == '\n')
 			count++;
 		str++;
 	}
-	// Son satırı da ekle (eğer newline ile bitmiyorsa)
-	if (cub->map->one_line[ft_strlen(cub->map->one_line) - 1] != '\n')
+	if (one_line[ft_strlen(one_line) - 1] != '\n')
 		count++;
-	
-	// Bellek ayır
-	lines = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!lines)
-		error_msg("Memory allocation failed\n", 2, cub);
-	
-	// Satırları parse et (boş satırlar dahil)
+	return (count);
+}
+
+static void	parse_lines_from_one_line(char **lines, char *one_line, int count, t_cub3d *cub)
+{
+	char	*str;
+	char	*start;
+	int		len;
+	int		i;
+
 	i = 0;
-	str = cub->map->one_line;
+	str = one_line;
 	while (*str && i < count)
 	{
-		char	*start;
-		int		len;
-		
 		start = str;
 		len = 0;
-		// Newline'a kadar veya string sonuna kadar oku
 		while (*str && *str != '\n')
 		{
 			len++;
 			str++;
 		}
-		// Satırı kopyala (boş satırlar da dahil)
 		lines[i] = ft_substr(start, 0, len);
 		if (!lines[i])
 			error_msg("Memory allocation failed\n", 2, cub);
@@ -100,6 +97,19 @@ void split_one_line(t_cub3d *cub)
 			str++;
 	}
 	lines[i] = NULL;
+}
+
+void split_one_line(t_cub3d *cub)
+{
+	char	**lines;
+	int		count;
+
+	free_existing_map_lines(cub);
+	count = count_lines_in_one_line(cub->map->one_line);
+	lines = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!lines)
+		error_msg("Memory allocation failed\n", 2, cub);
+	parse_lines_from_one_line(lines, cub->map->one_line, count, cub);
 	cub->map->map_lines = lines;
 }
 
