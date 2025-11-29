@@ -1,7 +1,7 @@
-	NAME = cub3d
-
+NAME = cub3d
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -Iminilibx-linux
+MLX_FLAGS = -Lminilibx-linux -lmlx -lXext -lX11 -lm
 
 SRC = main.c \
 	cub_parsing/controller.c \
@@ -25,12 +25,14 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C libft
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) 
+	@make -C minilibx-linux
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 	@echo "✅ $(NAME) compiled"
 
 clean:
 	@make clean -C libft
 	@rm -f $(OBJ) $(GNL_OBJS)
+	@make -C minilibx-linux clean
 	@echo "🧹 bye bye object files"
 
 fclean:

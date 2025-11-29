@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include "minilibx-linux/mlx.h"
 
 void all_free(t_cub3d *cub)
 {
@@ -113,11 +114,44 @@ void split_one_line(t_cub3d *cub)
 	cub->map->map_lines = lines;
 }
 
+void	init_game(t_game *game)
+{
+	game->mlx = mlx_init();
+	game->window = mlx_new_window(game->mlx, SCREEN_WIDTH, SCREE_HEIGHT, "Cub3d");
+	game->img = mlx_new_image(game->mlx, SCREEN_WIDTH, SCREE_HEIGHT);
+}
+
+int	close_window(t_game *game)
+{
+	if (!game)
+		return (0);
+	if (game->img)
+		mlx_destroy_image(game->mlx, game->img);
+	if (game->window)
+		mlx_destroy_window(game->mlx, game->window);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+		game->mlx = NULL;
+	}
+	exit(0);
+	return (0);
+}
+
+int	key_press(int keycode, t_game *game)
+{
+	if (keycode == KEY_ESC)
+		close_window(game);
+	return (0);
+}
+
 int main(int ac, char **arg)
 {
 	static t_cub3d	cub;
 	static t_map	map;
 	static t_map_comp	comp; // zero-initialized
+	static t_game game;
 
 	cub.map = &map;
 	cub.comp = &comp;
@@ -130,7 +164,12 @@ int main(int ac, char **arg)
 	copy_map(&cub);
 	eliminate_one_line(&cub);
 	is_map_valid(cub.map->map_lines, &cub);
-	int i = 0;
+
+	init_game(&game);
+	mlx_hook(game.window, EVENT_KEY_PRESS, 1L << 0, key_press, &game);
+	mlx_hook(game.window, EVENT_DESTROY, 0, close_window, &game);
+	mlx_loop(game.mlx);
+	/* int i = 0;
 	while (cub.map->map_lines[i] != NULL)
 	{
 		printf("%s", cub.map->map_lines[i]);
@@ -139,6 +178,7 @@ int main(int ac, char **arg)
 	}
 	//is_map_valid(cub.map->map_lines, &cub);
 	printf("NO: %s\n", cub.comp->no);
+	*/
 	all_free(&cub);
 	return (0);
 }

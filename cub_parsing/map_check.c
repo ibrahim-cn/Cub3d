@@ -197,7 +197,7 @@ static void	check_standalone_zero(char *line, t_cub3d *cub)
 		error_msg("Standalone '0' found outside map definition\n", 1, cub);
 }
 
-static void	process_map_line(char **map_lines, int i, int comp_status, \
+static void	process_map_line(int i, int comp_status, \
 		int *map_start_index, int *map_end_index, t_cub3d *cub)
 {
 	if (comp_status == 1)
@@ -230,7 +230,7 @@ static void	find_map_bounds(char **map_lines, int *start, int *end, t_cub3d *cub
 		comp_status = check_comp(map_lines[i], cub->comp, cub);
 		if (*start == -1 && comp_status == 2)
 			check_standalone_zero(map_lines[i], cub);
-		process_map_line(map_lines, i, comp_status, start, end, cub);
+		process_map_line(i, comp_status, start, end, cub);
 		i++;
 	}
 	if (!all_comps_found(cub->comp))

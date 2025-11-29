@@ -16,13 +16,17 @@
 
 #include "libft/libft.h"
 #include "get_next_line/get_next_line.h"
+#include "./minilibx-linux/mlx.h"
 #include <stdio.h>
 #include <fcntl.h>
 
 #define FLOOR '0'
 #define WALL '1'
-#define SCREEN_WIDTH 1920
-#define SCREE_HEIGHT 1080
+#define SCREEN_WIDTH 1080
+#define SCREE_HEIGHT 720
+#define KEY_ESC 65307
+#define EVENT_KEY_PRESS 2
+#define EVENT_DESTROY 17
 
 typedef struct s_map
 {
@@ -93,6 +97,21 @@ typedef struct s_wall
 
 }	t_wall;
 
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	char	bits_per_pixel;
+	
+}	t_img;
+
+typedef struct s_game
+{
+	void	*mlx;
+	void	*window;
+	void	*img;
+}	t_game;
+
 //utils.c
 void	error_msg(char *message, int code, t_cub3d *cub);
 int		check_tab(char *line);
@@ -117,6 +136,9 @@ void	is_map_valid(char **map_lines, t_cub3d *cub);
 void	all_free(t_cub3d *cub);
 void	eliminate_one_line(t_cub3d *cub);
 void	split_one_line(t_cub3d *cub);
+void	init_game(t_game *game);
+int		key_press(int keycode, t_game *game);
+int		close_window(t_game *game);
 
 //map_check_walls.c
 void	check_map_layout(t_cub3d *cub);
