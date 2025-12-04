@@ -281,6 +281,7 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	cub->map->map_height = map_end_index - map_start_index + 1;
 	check_empty_lines_in_map(map_lines, map_start_index, map_end_index, cub);
 	check_content_after_map(map_lines, map_end_index, cub);
+	validate_colors(cub); // Renkleri string'den int'e çevir
 	check_map_layout(cub);
 }
 

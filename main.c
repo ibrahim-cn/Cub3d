@@ -114,35 +114,108 @@ void split_one_line(t_cub3d *cub)
 	cub->map->map_lines = lines;
 }
 
-void	init_game(t_game *game)
+void	init_game(t_cub3d *cub)
 {
-	game->mlx = mlx_init();
-	game->window = mlx_new_window(game->mlx, SCREEN_WIDTH, SCREE_HEIGHT, "Cub3d");
-	game->img = mlx_new_image(game->mlx, SCREEN_WIDTH, SCREE_HEIGHT);
+	cub->mlx = mlx_init();
+	if (!cub->mlx)
+		error_msg("MLX init failed\n", 1, cub);
+
+	cub->win = mlx_new_window(cub->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "Cub3D");
+	if (!cub->win)
+		error_msg("MLX window failed\n", 1, cub);
+
+	cub->imgt.img = mlx_new_image(cub->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+	if (!cub->imgt.img)
+		error_msg("MLX image failed\n", 1, cub);
+
+	cub->imgt.addr = mlx_get_data_addr(cub->imgt.img, &cub->imgt.bpp, 
+			&cub->imgt.line_len, &cub->imgt.endian);
+}
+static void set_vectors(t_cub3d *cub, double x, double y, double p_x, double p_y)
+{
+	cub->player.dir_x = x;
+	cub->player.dir_y = y;
+	cub->player.plane_x = p_x;
+	cub->player.plane_y = p_y;
+}
+void	init_player(t_cub3d *cub)
+{
+	cub->player.pos_x += 0.5;
+	cub->player.pos_y += 0.5;
+
+	if (cub->player_dir == 'N')
+		set_vectors(cub, 0, -1, 0.66, 0);
+	else if (cub->player_dir == 'S')
+		set_vectors(cub, 0, 1, -0.66, 0);
+	else if (cub->player_dir == 'E')
+		set_vectors(cub, 1, 0, 0, 0.66);
+	else if (cub->player_dir == 'W')
+		set_vectors(cub, -1, 0, 0, -0.66);
 }
 
-int	close_window(t_game *game)
+int	close_window(t_cub3d *cub)
 {
-	if (!game)
+	if (!cub)
 		return (0);
-	if (game->img)
-		mlx_destroy_image(game->mlx, game->img);
-	if (game->window)
-		mlx_destroy_window(game->mlx, game->window);
-	if (game->mlx)
+	if (cub->imgt.img)
+		mlx_destroy_image(cub->mlx, cub->imgt.img);
+	if (cub->win)
+		mlx_destroy_window(cub->mlx, cub->win);
+	if (cub->mlx)
 	{
-		mlx_destroy_display(game->mlx);
-		free(game->mlx);
-		game->mlx = NULL;
+		mlx_destroy_display(cub->mlx);
+		free(cub->mlx);
+		cub->mlx = NULL;
 	}
 	exit(0);
 	return (0);
 }
 
-int	key_press(int keycode, t_game *game)
+int	render_loop(t_cub3d *cub)
+{
+	move_player(cub);
+	rotate_player(cub);
+
+	// 2. Sonra Yeni Konuma Göre Çiz
+	raycasting(cub);
+	mlx_put_image_to_window(cub->mlx, cub->win, cub->imgt.img, 0, 0);
+	return (0);
+}
+
+int	key_press(int keycode, t_cub3d *cub)
 {
 	if (keycode == KEY_ESC)
-		close_window(game);
+		close_window(cub);
+	else if (keycode == 119) // W
+		cub->keys.w = 1;
+	else if (keycode == 97) // A
+		cub->keys.a = 1;
+	else if (keycode == 115) // S
+		cub->keys.s = 1;
+	else if (keycode == 100) // D
+		cub->keys.d = 1;
+	else if (keycode == 65361) // Sol Ok
+		cub->keys.left = 1;
+	else if (keycode == 65363) // Sağ Ok
+		cub->keys.right = 1;
+	else if (keycode == 65307) // ESC
+		close_window(cub);
+	return (0);
+}
+int	key_release(int keycode, t_cub3d *cub)
+{
+	if (keycode == 119)
+		cub->keys.w = 0;
+	else if (keycode == 97)
+		cub->keys.a = 0;
+	else if (keycode == 115)
+		cub->keys.s = 0;
+	else if (keycode == 100)
+		cub->keys.d = 0;
+	else if (keycode == 65361)
+		cub->keys.left = 0;
+	else if (keycode == 65363)
+		cub->keys.right = 0;
 	return (0);
 }
 
@@ -151,7 +224,6 @@ int main(int ac, char **arg)
 	static t_cub3d	cub;
 	static t_map	map;
 	static t_map_comp	comp; // zero-initialized
-	static t_game game;
 
 	cub.map = &map;
 	cub.comp = &comp;
@@ -165,10 +237,16 @@ int main(int ac, char **arg)
 	eliminate_one_line(&cub);
 	is_map_valid(cub.map->map_lines, &cub);
 
-	init_game(&game);
-	mlx_hook(game.window, EVENT_KEY_PRESS, 1L << 0, key_press, &game);
-	mlx_hook(game.window, EVENT_DESTROY, 0, close_window, &game);
-	mlx_loop(game.mlx);
+	init_game(&cub);
+	init_textures(&cub);
+	init_player(&cub);
+	mlx_loop_hook(cub.mlx, render_loop, &cub);
+	mlx_hook(cub.win, EVENT_KEY_PRESS, 1L << 0, key_press, &cub);
+	mlx_hook(cub.win, EVENT_DESTROY, 0, close_window, &cub);
+	mlx_hook(cub.win, 2, 1L << 0, key_press, &cub);
+	mlx_hook(cub.win, 3, 1L << 1, key_release, &cub);
+	
+	mlx_loop(cub.mlx);
 	/* int i = 0;
 	while (cub.map->map_lines[i] != NULL)
 	{

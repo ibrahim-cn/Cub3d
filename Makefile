@@ -9,6 +9,10 @@ SRC = main.c \
 	cub_parsing/utils1.c \
 	cub_parsing/map_check.c \
 	cub_parsing/map_check_walls.c \
+	cub_raycasting/raycasting.c \
+	cub_raycasting/utils_render.c \
+	cub_raycasting/map_utils.c \
+	cub_raycasting/move.c \
 	$(GNL_SRCS)
 
 GNL_SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c

@@ -17,13 +17,14 @@
 #include "libft/libft.h"
 #include "get_next_line/get_next_line.h"
 #include "./minilibx-linux/mlx.h"
+#include <math.h>
 #include <stdio.h>
 #include <fcntl.h>
 
 #define FLOOR '0'
 #define WALL '1'
-#define SCREEN_WIDTH 1080
-#define SCREE_HEIGHT 720
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 #define KEY_ESC 65307
 #define EVENT_KEY_PRESS 2
 #define EVENT_DESTROY 17
@@ -83,34 +84,51 @@ typedef struct s_player
 	double	plane_y;
 }	t_player;
 
-typedef struct s_cub3d
-{
-	t_map		*map;
-	t_map_comp	*comp;
-	char		player_dir;
-	t_player	player;
-	t_ray		ray;
-}	t_cub3d;
-
-typedef struct s_wall
-{
-
-}	t_wall;
 
 typedef struct s_img
 {
-	void	*img;
-	char	*addr;
-	char	bits_per_pixel;
+	void	*img;	   // Görüntü pointer'ı (mlx_new_image'den döner)
+	char	*addr;	  // Görüntünün hafızadaki adresi (pikselleri buraya yazacağız)
+	int		bpp;	 // Bits per pixel (Piksel başına bit sayısı)
+	int		line_len;   // Line length (Bir satırın bayt uzunluğu)
+	int		endian;     // Endian (Hafıza sıralaması)
 	
 }	t_img;
 
-typedef struct s_game
+typedef struct s_textures
 {
-	void	*mlx;
-	void	*window;
-	void	*img;
-}	t_game;
+	t_img	no;
+	t_img	so;
+	t_img	ea;
+	t_img	we;
+}	t_textures;
+
+typedef struct s_keys
+{
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	left;
+	int	right;
+}	t_keys;
+
+typedef struct s_cub3d
+{
+	void		*mlx;
+	void		*win;
+	t_img		imgt;
+	t_map		*map;
+	t_map_comp	*comp;
+	char		player_dir;
+	int         player_x; // Haritadaki x indeksi
+    int         player_y; // Haritadaki y indeksi
+	t_player	player;
+	t_ray		ray;
+	t_textures	textures;
+	t_keys		keys;
+}	t_cub3d;
+
 
 //utils.c
 void	error_msg(char *message, int code, t_cub3d *cub);
@@ -132,15 +150,31 @@ void	copy_map(t_cub3d *cub);
 int		check_comp(char *line, t_map_comp *comp, t_cub3d *cub);
 void	is_map_valid(char **map_lines, t_cub3d *cub);
 
-
+//main.c
 void	all_free(t_cub3d *cub);
 void	eliminate_one_line(t_cub3d *cub);
 void	split_one_line(t_cub3d *cub);
-void	init_game(t_game *game);
-int		key_press(int keycode, t_game *game);
-int		close_window(t_game *game);
+void	init_game(t_cub3d *cub);
+void	init_player(t_cub3d *cub);
+int		key_press(int keycode, t_cub3d *cub);
+int		close_window(t_cub3d *cub);
+
+//map_check.c
+void validate_colors(t_cub3d *cub);
 
 //map_check_walls.c
 void	check_map_layout(t_cub3d *cub);
+char	get_map_cell(t_cub3d *cub, int map_y, int map_x);
+
+//raycasting.c
+void	raycasting(t_cub3d *cub);
+void	raycasting_loop(t_cub3d *cub, int x);
+//utils_render.c
+void	my_mlx_pixel_put(t_cub3d *cub, int x, int y, int color);
+int	create_rgb(int r, int g, int b);
+void	init_textures(t_cub3d *cub);
+//move.c
+void	move_player(t_cub3d *cub);
+void	rotate_player(t_cub3d *cub);
 
 #endif
