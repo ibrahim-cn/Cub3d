@@ -302,25 +302,53 @@ static int	parse_rgb(char *line)
     if (val < 0 || val > 255) return (-1); // 0-255 aralığı kontrolü
     return (val);
 }
+static void	validate_ceiling(t_cub3d *cub)
+{
+	char	**rgb;
+	int		i;
+
+	rgb = ft_split(cub->comp->c, ',');
+	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
+	{
+		free_split(rgb);
+		error_msg("Invalid ceiling color format\n", 1, cub);
+	}
+	i = 0;
+	while (i < 3)
+	{
+		cub->comp->ceiling_color[i] = parse_rgb(rgb[i]);
+		if (cub->comp->ceiling_color[i] == -1)
+		{
+			free_split(rgb);
+			error_msg("Invalid ceiling color value (0-255 only)\n", 1, cub);
+		}
+		i++;
+	}
+	free_split(rgb);
+}
 
 void validate_colors(t_cub3d *cub)
 {
-    char **rgb;
-    int i;
+	char	**rgb;
+	int		i;
 
-    // Zemin (Floor) Rengi Kontrolü
-    rgb = ft_split(cub->comp->f, ',');
-    if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3]) // Tam 3 parça olmalı
-        error_msg("Invalid floor color format\n", 1, cub); // rgb'yi free'lemeyi unutma!
-    i = -1;
-    while (++i < 3)
-    {
-        cub->comp->floor_color[i] = parse_rgb(rgb[i]);
-        if (cub->comp->floor_color[i] == -1)
-             error_msg("Invalid floor color value (0-255 only)\n", 1, cub); // rgb'yi free'le!
-    }
-    // rgb dizisini free'le (libft'inde ft_free_split gibi bir şey varsa kullan)
-
-    // Tavan (Ceiling) Rengi Kontrolü
-    // (Aynı işlemi cub->comp->c ve cub->comp->ceiling_color için tekrarla)
+	// Zemin (Floor) Rengi Kontrolü
+	rgb = ft_split(cub->comp->f, ',');
+	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
+	{
+		free_split(rgb);
+		error_msg("Invalid floor color format\n", 1, cub);
+	}
+	i = -1;
+	while (++i < 3)
+	{
+		cub->comp->floor_color[i] = parse_rgb(rgb[i]);
+		if (cub->comp->floor_color[i] == -1)
+		{
+			free_split(rgb);
+			error_msg("Invalid floor color value (0-255 only)\n", 1, cub);
+		}
+	}
+	free_split(rgb);
+	validate_ceiling(cub);
 }

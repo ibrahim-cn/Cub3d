@@ -92,6 +92,8 @@ typedef struct s_img
 	int		bpp;	 // Bits per pixel (Piksel başına bit sayısı)
 	int		line_len;   // Line length (Bir satırın bayt uzunluğu)
 	int		endian;     // Endian (Hafıza sıralaması)
+	int		width;      // Texture genişliği
+	int		height;     // Texture yüksekliği
 	
 }	t_img;
 
@@ -141,6 +143,7 @@ void	validate_texture_file(char *path, t_cub3d *cub);
 //utils1.c
 void	free_map(t_cub3d *cub);
 void	free_comp(t_cub3d *cub);
+void	free_split(char **split);
 //controller.c
 void	arg_controller(char **arg, int ac);
 //map_check.c
