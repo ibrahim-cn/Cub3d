@@ -236,7 +236,7 @@ int main(int ac, char **arg)
 	copy_map(&cub);
 	eliminate_one_line(&cub);
 	is_map_valid(cub.map->map_lines, &cub);
-
+	
 	init_game(&cub);
 	init_textures(&cub);
 	init_player(&cub);
