@@ -2,53 +2,80 @@
 #define MOVE_SPEED 0.05
 #define ROT_SPEED 0.03
 
+static int	is_valid_move(t_cub3d *cub, double new_y, double new_x)
+{
+	int	x;
+	int	y;
+
+	x = (int)new_x;
+	y = (int)new_y;
+
+	// 1. Harita Yüksekliği Kontrolü
+	if (y < 0 || y >= cub->map->map_height)
+		return (0); // Harita dışı
+
+	// 2. Satır Uzunluğu Kontrolü (Segfault ve Görünmez Duvarı Önler)
+	// Gideceğimiz x, o satırın uzunluğundan büyükse durmalıyız.
+	if (x < 0 || x >= (int)ft_strlen(cub->map->map_lines[y]))
+		return (0);
+
+	// 3. Duvar ve Boşluk Kontrolü
+	// Sadece '1' değil, ' ' (boşluk) karakterine de girmemeliyiz.
+	if (cub->map->map_lines[y][x] == '1' || cub->map->map_lines[y][x] == ' ')
+		return (0);
+
+	return (1); // Hareket güvenli
+}
+
+/* move.c içindeki move_player fonksiyonu */
+
 void	move_player(t_cub3d *cub)
 {
 	double	new_x;
 	double	new_y;
 
-	// W Tuşu: İleri git (Yön vektörünü ekle)
+	// W Tuşu (İleri)
 	if (cub->keys.w)
 	{
 		new_x = cub->player.pos_x + cub->player.dir_x * MOVE_SPEED;
 		new_y = cub->player.pos_y + cub->player.dir_y * MOVE_SPEED;
-        // Basit Duvar Kontrolü: Gideceğimiz yer duvar değilse yürü
-		if (get_map_cell(cub, (int)cub->player.pos_y, (int)new_x) != '1')
+		
+		// X ekseninde hareket güvenli mi?
+		if (is_valid_move(cub, cub->player.pos_y, new_x))
 			cub->player.pos_x = new_x;
-		if (get_map_cell(cub, (int)new_y, (int)cub->player.pos_x) != '1')
+		// Y ekseninde hareket güvenli mi?
+		if (is_valid_move(cub, new_y, cub->player.pos_x))
 			cub->player.pos_y = new_y;
 	}
-	// S Tuşu: Geri git (Yön vektörünü çıkar)
+	// S Tuşu (Geri)
 	if (cub->keys.s)
 	{
 		new_x = cub->player.pos_x - cub->player.dir_x * MOVE_SPEED;
 		new_y = cub->player.pos_y - cub->player.dir_y * MOVE_SPEED;
-		if (get_map_cell(cub, (int)cub->player.pos_y, (int)new_x) != '1')
+
+		if (is_valid_move(cub, cub->player.pos_y, new_x))
 			cub->player.pos_x = new_x;
-		if (get_map_cell(cub, (int)new_y, (int)cub->player.pos_x) != '1')
+		if (is_valid_move(cub, new_y, cub->player.pos_x))
 			cub->player.pos_y = new_y;
 	}
-    // A Tuşu: Sola git (Yön vektörüne dik hareket et - Plane vektörünü ters ekle)
-    // Not: A ve D için dir_y ve dir_x'in yerleri değiştirilerek dik vektör elde edilir.
-    // Ancak basitlik için plane vektörü zaten diktir, onu kullanabilirsin ya da:
-    // Sol Vektör: (dir_y, -dir_x)
+	// A ve D tuşları için de aynı mantığı uygula...
+    // (Aşağıda A ve D için de örnek var)
     if (cub->keys.a)
     {
         new_x = cub->player.pos_x - cub->player.plane_x * MOVE_SPEED;
         new_y = cub->player.pos_y - cub->player.plane_y * MOVE_SPEED;
-        if (get_map_cell(cub, (int)cub->player.pos_y, (int)new_x) != '1')
+        if (is_valid_move(cub, cub->player.pos_y, new_x))
             cub->player.pos_x = new_x;
-        if (get_map_cell(cub, (int)new_y, (int)cub->player.pos_x) != '1')
+        if (is_valid_move(cub, new_y, cub->player.pos_x))
             cub->player.pos_y = new_y;
     }
-    // D Tuşu: Sağa git
     if (cub->keys.d)
     {
         new_x = cub->player.pos_x + cub->player.plane_x * MOVE_SPEED;
         new_y = cub->player.pos_y + cub->player.plane_y * MOVE_SPEED;
-        if (get_map_cell(cub, (int)cub->player.pos_y, (int)new_x) != '1')
+        if (is_valid_move(cub, cub->player.pos_y, new_x))
             cub->player.pos_x = new_x;
-        if (get_map_cell(cub, (int)new_y, (int)cub->player.pos_x) != '1')
+        if (is_valid_move(cub, new_y, cub->player.pos_x))
             cub->player.pos_y = new_y;
     }
 }
