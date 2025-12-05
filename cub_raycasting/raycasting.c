@@ -18,9 +18,6 @@
 // static void calculate_wall_height(...);
 // static void draw_wall_slice(...);
 
-//#define TEX_WIDTH 64
-//#define TEX_HEIGHT 64
-
 void	raycasting(t_cub3d *cub)
 {
 	int		x;
