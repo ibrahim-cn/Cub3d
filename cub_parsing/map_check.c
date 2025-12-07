@@ -125,25 +125,25 @@ static int	set_texture_path(char **texture_ptr, char *line, t_cub3d *cub)
 
 static int	process_texture_component(char *line, t_map_comp *comp, t_cub3d *cub)
 {
-	if (!ft_strncmp(line, "NO", 2) && empty(line[2]) && !comp->no)
+	if (!ft_strncmp(line, "NO", 2) && ft_empty(line[2]) && !comp->no)
 		return (set_texture_path(&comp->no, line + 2, cub));
-	else if (!ft_strncmp(line, "SO", 2) && empty(line[2]) && !comp->so)
+	else if (!ft_strncmp(line, "SO", 2) && ft_empty(line[2]) && !comp->so)
 		return (set_texture_path(&comp->so, line + 2, cub));
-	else if (!ft_strncmp(line, "WE", 2) && empty(line[2]) && !comp->we)
+	else if (!ft_strncmp(line, "WE", 2) && ft_empty(line[2]) && !comp->we)
 		return (set_texture_path(&comp->we, line + 2, cub));
-	else if (!ft_strncmp(line, "EA", 2) && empty(line[2]) && !comp->ea)
+	else if (!ft_strncmp(line, "EA", 2) && ft_empty(line[2]) && !comp->ea)
 		return (set_texture_path(&comp->ea, line + 2, cub));
 	return (-1);
 }
 
 static int	process_color_component(char *line, t_map_comp *comp, t_cub3d *cub)
 {
-	if (line[0] == 'F' && empty(line[1]) && !comp->f)
+	if (line[0] == 'F' && ft_empty(line[1]) && !comp->f)
 	{
 		comp->f = extract_color(line + 1, cub);
 		return (0);
 	}
-	else if (line[0] == 'C' && empty(line[1]) && !comp->c)
+	else if (line[0] == 'C' && ft_empty(line[1]) && !comp->c)
 	{
 		comp->c = extract_color(line + 1, cub);
 		return (0);
@@ -322,23 +322,31 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	create_clean_map(cub);
 }
 
-static int	parse_rgb(char *line)
+static int	parse_rgb(char *line) // Bu fonksiyon tek bir renk değerini (örn: "220") kontrol eder
 {
-    // Bu fonksiyon tek bir renk değerini (örn: "220") kontrol eder
-    int i = 0;
+	int	i;
+	int j;
+	int	val;
+
+	i = 0;
     while (line[i] && line[i] == ' ') // Baştaki boşlukları atla
         i++;
-    if (!line[i]) return (-1); // Sadece boşluksa hata
-    int j = i;
+    if (!line[i])
+		return (-1); // Sadece boşluksa hata
+    j = i;
     while (line[j] && ft_isdigit(line[j])) // Rakamları kontrol et
         j++;
     while (line[j] && line[j] == ' ') // Sondaki boşlukları atla
         j++;
-    if (line[j] != '\0') return (-1); // Rakam ve boşluk dışında bir şey varsa hata
-    int val = ft_atoi(line + i);
-    if (val < 0 || val > 255) return (-1); // 0-255 aralığı kontrolü
-    return (val);
+    if (line[j] != '\0')
+		return (-1); // Rakam ve boşluk dışında bir şey varsa hata
+    val = ft_atoi(line + i);
+    if (val < 0 || val > 255)
+		return (-1); // 0-255 aralığı kontrolü
+	return (val);
 }
+
+
 static void	validate_ceiling(t_cub3d *cub)
 {
 	char	**rgb;

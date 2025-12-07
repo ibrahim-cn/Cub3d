@@ -20,30 +20,9 @@ void	error_msg(char *message, int code, t_cub3d *cub)
 	exit(code);
 }
 
-int	check_tab(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\t')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	empty(char c)
-{
-	if (c == '\n' || c == ' ')
-		return (1);
-	return (0);
-}
-
 char	*trim_spaces(char *str)
 {
-	while (*str && empty(*str))
+	while (*str && ft_empty(*str))
 		str++;
 	if (!*str)
 		return (NULL);
@@ -57,12 +36,11 @@ char	*extract_path(char *line)
 	char	*trimmed;
 
 	ptr = line;
-	while (*ptr && !empty(*ptr))
+	while (*ptr && !ft_empty(*ptr))
 		ptr++;
 	ptr = trim_spaces(ptr);
 	if (!ptr || !*ptr)
 		return (NULL);
-	// Sonundaki boşlukları ve newline'ları da temizle
 	trimmed = ft_strtrim(ptr, " \t\n\r");
 	if (!trimmed || !*trimmed)
 	{

@@ -134,12 +134,8 @@ typedef struct s_cub3d
 
 //utils.c
 void	error_msg(char *message, int code, t_cub3d *cub);
-int		check_tab(char *line);
-int		empty(char c);
 char	*trim_spaces(char *str);
 char	*extract_path(char *line);
-char	*extract_color(char *line, t_cub3d *cub);
-void	validate_texture_file(char *path, t_cub3d *cub);
 int		count_commas(char *str);
 void	skip_spaces(char **ptr);
 //utils1.c
@@ -147,8 +143,12 @@ void	free_map(t_cub3d *cub);
 void	free_comp(t_cub3d *cub);
 void	free_split(char **split);
 void	all_free(t_cub3d *cub);
-//controller.c
-void	arg_controller(char **arg, int ac);
+//controler.c
+int		check_tab(char *line);
+int		ft_empty(char c);
+//parsing_color.c
+char	*extract_color(char *line, t_cub3d *cub);
+void	validate_texture_file(char *path, t_cub3d *cub);
 //map_check.c
 int		cub_check(char *file_name);
 void	check_map_exist(t_cub3d *cub);
@@ -159,11 +159,14 @@ void	is_map_valid(char **map_lines, t_cub3d *cub);
 //main.c
 void	eliminate_one_line(t_cub3d *cub);
 void	split_one_line(t_cub3d *cub);
+//initialize.c
 void	init_game(t_cub3d *cub);
+void	set_vectors(t_cub3d *cub, double x, double y, double p_x, double p_y);
 void	init_player(t_cub3d *cub);
-int		key_press(int keycode, t_cub3d *cub);
 int		close_window(t_cub3d *cub);
-
+int		render_loop(t_cub3d *cub);
+int		key_press(int keycode, t_cub3d *cub);
+int	key_release(int keycode, t_cub3d *cub);
 //map_check.c
 void validate_colors(t_cub3d *cub);
 

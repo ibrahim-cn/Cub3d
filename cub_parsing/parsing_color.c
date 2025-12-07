@@ -32,7 +32,7 @@ static char	*prepare_color_string(char *line)
 	char	*trimmed;
 
 	ptr = line;
-	while (*ptr && !empty(*ptr))
+	while (*ptr && !ft_empty(*ptr))
 		ptr++;
 	trimmed = trim_spaces(ptr);
 	if (!trimmed || !*trimmed)

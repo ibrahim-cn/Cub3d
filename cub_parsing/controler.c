@@ -12,13 +12,23 @@
 
 #include "../cub3d.h"
 
-void arg_controller(char **arg, int ac)
+int	check_tab(char *line)
 {
-	(void)arg;
-	if (ac != 2)
+	int	i;
+
+	i = 0;
+	while (line[i])
 	{
-		//error_msg("Amount of arguments is invalid.", 1);
+		if (line[i] == '\t')
+			return (1);
+		i++;
 	}
+	return (0);
 }
-//bu fonksiyon şimdilik böyle dursun, eğer function callingler main'e sığmazsa 
-//fonksiyon bölmek için kullanacağım. oke.
+
+int	ft_empty(char c)
+{
+	if (c == '\n' || c == ' ')
+		return (1);
+	return (0);
+}

@@ -1,7 +1,7 @@
 #include "../cub3d.h"
 
-#define MOVE_SPEED 0.05
-#define ROT_SPEED 0.03
+#define MOVE_SPEED 0.1
+#define ROT_SPEED 0.1
 #define PLAYER_SIZE 0.2 // Oyuncunun kapladığı alan (Hitbox boyutu)
 
 // Verilen (x, y) noktasının haritada güvenli olup olmadığını kontrol eder

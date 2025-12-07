@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -Iminilibx-linux
 MLX_FLAGS = -Lminilibx-linux -lmlx -lXext -lX11 -lm
 
 SRC = main.c \
-	cub_parsing/controller.c \
+	cub_parsing/controler.c \
 	cub_parsing/utils.c \
 	cub_parsing/utils1.c \
 	cub_parsing/map_check.c \
@@ -14,6 +14,7 @@ SRC = main.c \
 	cub_raycasting/utils_render.c \
 	cub_raycasting/map_utils.c \
 	cub_raycasting/move.c \
+	cub_raycasting/initialize.c \
 	$(GNL_SRCS)
 
 GNL_SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
