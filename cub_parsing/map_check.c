@@ -271,6 +271,35 @@ static void	check_content_after_map(char **map_lines, int end, t_cub3d *cub)
 	}
 }
 
+static void	create_clean_map(t_cub3d *cub)
+{
+	char	**new_map;
+	int		i;
+
+	// 1. Sadece harita yüksekliği kadar yer ayır
+	new_map = malloc(sizeof(char *) * (cub->map->map_height + 1));
+	if (!new_map)
+		error_msg("Memory allocation failed for clean map\n", 1, cub);
+
+	// 2. Eski haritadan sadece ilgili satırları kopyala
+	i = 0;
+	while (i < cub->map->map_height)
+	{
+		// start_index'ten başlayarak kopyala
+		new_map[i] = ft_strdup(cub->map->map_lines[cub->map->map_start_index + i]);
+		if (!new_map[i])
+			error_msg("Memory allocation failed for map line\n", 1, cub);
+		i++;
+	}
+	new_map[i] = NULL;
+
+	// 3. Eski kirli haritayı (headers dahil) temizle
+	free_map(cub); 
+
+	// 4. Yeni temiz haritayı ana struct'a tak
+	cub->map->map_lines = new_map;
+}
+
 void	is_map_valid(char **map_lines, t_cub3d *cub)
 {
 	int	map_start_index;
@@ -283,6 +312,14 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	check_content_after_map(map_lines, map_end_index, cub);
 	validate_colors(cub); // Renkleri string'den int'e çevir
 	check_map_layout(cub);
+	check_content_after_map(map_lines, map_end_index, cub);
+	validate_colors(cub);
+	
+	// ÖNCE Harita düzenini kontrol et (Oyuncuyu bul, flood-fill yap)
+	check_map_layout(cub);
+
+	// SONRA Haritayı temizle (YENİ EKLENEN ADIM)
+	create_clean_map(cub);
 }
 
 static int	parse_rgb(char *line)

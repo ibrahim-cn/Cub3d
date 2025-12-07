@@ -140,10 +140,13 @@ char	*trim_spaces(char *str);
 char	*extract_path(char *line);
 char	*extract_color(char *line, t_cub3d *cub);
 void	validate_texture_file(char *path, t_cub3d *cub);
+int		count_commas(char *str);
+void	skip_spaces(char **ptr);
 //utils1.c
 void	free_map(t_cub3d *cub);
 void	free_comp(t_cub3d *cub);
 void	free_split(char **split);
+void	all_free(t_cub3d *cub);
 //controller.c
 void	arg_controller(char **arg, int ac);
 //map_check.c
@@ -154,7 +157,6 @@ int		check_comp(char *line, t_map_comp *comp, t_cub3d *cub);
 void	is_map_valid(char **map_lines, t_cub3d *cub);
 
 //main.c
-void	all_free(t_cub3d *cub);
 void	eliminate_one_line(t_cub3d *cub);
 void	split_one_line(t_cub3d *cub);
 void	init_game(t_cub3d *cub);

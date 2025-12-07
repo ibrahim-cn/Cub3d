@@ -1,6 +1,6 @@
 #include "../cub3d.h"
 
-static int	get_row_len(char *row)
+/*static int	get_row_len(char *row)
 {
 	int	len;
 
@@ -8,28 +8,25 @@ static int	get_row_len(char *row)
 	while (len > 0 && (row[len - 1] == '\n' || row[len - 1] == '\r'))
 		len--;
 	return (len);
-}
+}*/
 
-char	get_map_cell(t_cub3d *cub, int map_y, int map_x)
+char	get_map_cell(t_cub3d *cub, int y, int x)
 {
-	int		abs_y;
-	char	*row;
-	int		len;
+	// 1. Harita sınırları içinde miyiz? (Göreceli Y'ye göre)
+	if (y < 0 || y >= cub->map->map_height)
+		return (' ');
 
-	if (!cub || !cub->map || !cub->map->map_lines)
-		return ('1');
-	if (map_y < 0 || map_y >= cub->map->map_height)
-		return ('1');
-	abs_y = cub->map->map_start_index + map_y;
-	row = cub->map->map_lines[abs_y];
-	if (!row)
-		return ('1');
-	len = get_row_len(row);
-	if (map_x < 0 || map_x >= len)
-		return ('1');
-	if (row[map_x] == ' ')
-		return ('1');
-	return (row[map_x]);
+	// 2. Dosyadaki GERÇEK satır numarasını bul (Start Index ekle!)
+	// İşte eksik olan sihirli dokunuş burası:
+	int real_y = cub->map->map_start_index + y;
+
+	// 3. Satır var mı ve X satır uzunluğu içinde mi?
+	if (!cub->map->map_lines[real_y] || 
+		x < 0 || x >= (int)ft_strlen(cub->map->map_lines[real_y]))
+		return (' ');
+
+	// 4. Doğru hücreyi döndür
+	return (cub->map->map_lines[real_y][x]);
 }
 
 

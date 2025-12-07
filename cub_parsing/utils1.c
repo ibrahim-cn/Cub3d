@@ -15,7 +15,8 @@
 void	free_map(t_cub3d *cub)
 {
 	int	i;
-
+	if (!cub->map || !cub->map->map_lines)
+		return ;
 	if (cub->map->map_lines)
 	{
 		i = 0;
@@ -61,4 +62,10 @@ void	free_split(char **split)
 		i++;
 	}
 	free(split);
+}
+
+void all_free(t_cub3d *cub)
+{
+	free_map(cub);
+	free_comp(cub);
 }
