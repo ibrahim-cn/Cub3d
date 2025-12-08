@@ -298,6 +298,15 @@ static void	create_clean_map(t_cub3d *cub)
 
 	// 4. Yeni temiz haritayı ana struct'a tak
 	cub->map->map_lines = new_map;
+	
+	/*int j = 0;	
+	while (new_map[j] != NULL)
+	{
+		printf("%s", new_map[j]);
+		printf("\n");
+		j++;
+	}*/
+	
 }
 
 void	is_map_valid(char **map_lines, t_cub3d *cub)

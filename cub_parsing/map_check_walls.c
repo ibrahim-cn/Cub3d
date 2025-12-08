@@ -139,7 +139,7 @@ static char	**duplicate_map(t_cub3d *cub)
 }
 
 // Harita kopyasını temizler
-static void	free_map_copy(char **map_copy)
+void	free_map_copy(char **map_copy)
 {
 	int	i;
 

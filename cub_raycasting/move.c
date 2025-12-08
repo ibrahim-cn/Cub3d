@@ -1,9 +1,5 @@
 #include "../cub3d.h"
 
-#define MOVE_SPEED 0.1
-#define ROT_SPEED 0.1
-#define PLAYER_SIZE 0.2 // Oyuncunun kapladığı alan (Hitbox boyutu)
-
 // Verilen (x, y) noktasının haritada güvenli olup olmadığını kontrol eder
 static int	is_safe_point(t_cub3d *cub, double x, double y)
 {
@@ -89,16 +85,16 @@ void	rotate_player(t_cub3d *cub)
 {
 	double	old_dir_x;
 	double	old_plane_x;
-    double  speed;
+	double	speed;
 
-    // Hangi yöne döneceğiz?
-    if (cub->keys.right)
-        speed = ROT_SPEED; // Sağa dönüş (pozitif açı) - Not: Koordinat sistemine göre eksi de olabilir, denemelisin.
-    else if (cub->keys.left)
-        speed = -ROT_SPEED; // Sola dönüş
-    else
+	// Hangi yöne döneceğiz?
+	if (cub->keys.right)
+		speed = ROT_SPEED; // Sağa dönüş (pozitif açı) - Not: Koordinat sistemine göre eksi de olabilir, denemelisin.
+	else if (cub->keys.left)
+		speed = -ROT_SPEED; // Sola dönüş
+	else
 	{
-        return ; // Tuşa basılmıyorsa çık
+		return ; // Tuşa basılmıyorsa çık
 	}
 
 	// Yön Vektörünü Döndür

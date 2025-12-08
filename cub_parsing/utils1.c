@@ -15,6 +15,7 @@
 void	free_map(t_cub3d *cub)
 {
 	int	i;
+
 	if (!cub->map || !cub->map->map_lines)
 		return ;
 	if (cub->map->map_lines)
@@ -26,11 +27,16 @@ void	free_map(t_cub3d *cub)
 			i++;
 		}
 		free(cub->map->map_lines);
+		cub->map->map_lines = NULL;
 	}
 	if (cub->map->one_line)
+	{
 		free(cub->map->one_line);
+		cub->map->one_line = NULL;
+	}
 	if (cub->map->fd > 0)
 		close(cub->map->fd);
+	cub->map->fd = -1;
 }
 
 void	free_comp(t_cub3d *cub)

@@ -40,13 +40,33 @@ void	init_player(t_cub3d *cub)
 	else if (cub->player_dir == 'W')
 		set_vectors(cub, -1, 0, 0, -0.66);
 }
-
+void	free_textures(t_cub3d *cub)
+{
+	if (!cub || !cub->mlx)
+		return ;
+	if (cub->textures.no.img)
+		mlx_destroy_image(cub->mlx, cub->textures.no.img);
+	if (cub->textures.so.img)
+		mlx_destroy_image(cub->mlx, cub->textures.so.img);
+	if (cub->textures.we.img)
+		mlx_destroy_image(cub->mlx, cub->textures.we.img);
+	if (cub->textures.ea.img)
+		mlx_destroy_image(cub->mlx, cub->textures.ea.img);
+	if (cub->imgt.img)
+		mlx_destroy_image(cub->mlx, cub->imgt.img);
+	cub->textures.no.img = NULL;
+	cub->textures.so.img = NULL;
+	cub->textures.we.img = NULL;
+	cub->textures.ea.img = NULL;
+	cub->imgt.img = NULL;
+}
 int	close_window(t_cub3d *cub)
 {
 	if (!cub)
 		return (0);
-	if (cub->imgt.img)
-		mlx_destroy_image(cub->mlx, cub->imgt.img);
+	free_map(cub);
+	free_comp(cub);
+	free_textures(cub);
 	if (cub->win)
 		mlx_destroy_window(cub->mlx, cub->win);
 	if (cub->mlx)

@@ -28,6 +28,9 @@
 #define KEY_ESC 65307
 #define EVENT_KEY_PRESS 2
 #define EVENT_DESTROY 17
+#define MOVE_SPEED 0.1
+#define ROT_SPEED 0.1
+#define PLAYER_SIZE 0.2 // Oyuncunun kapladığı alan (Hitbox boyutu)
 
 typedef struct s_map
 {
@@ -163,6 +166,7 @@ void	split_one_line(t_cub3d *cub);
 void	init_game(t_cub3d *cub);
 void	set_vectors(t_cub3d *cub, double x, double y, double p_x, double p_y);
 void	init_player(t_cub3d *cub);
+void	free_textures(t_cub3d *cub);
 int		close_window(t_cub3d *cub);
 int		render_loop(t_cub3d *cub);
 int		key_press(int keycode, t_cub3d *cub);
@@ -173,7 +177,7 @@ void validate_colors(t_cub3d *cub);
 //map_check_walls.c
 void	check_map_layout(t_cub3d *cub);
 char	get_map_cell(t_cub3d *cub, int map_y, int map_x);
-
+void	free_map_copy(char **map_copy);
 //raycasting.c
 void	raycasting(t_cub3d *cub);
 void	raycasting_loop(t_cub3d *cub, int x);
