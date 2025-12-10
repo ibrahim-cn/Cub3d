@@ -6,7 +6,7 @@
 /*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 22:00:41 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/11/08 11:40:56 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/11 02:27:41 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	count_file_lines(t_cub3d *cub)
 	{
 		line = get_next_line(cub->map->fd, 0);
 		if (line == NULL)
-			break;
+			break ;
 		free(line);
 		line_count++;
 	}
@@ -95,7 +95,7 @@ static void	read_and_store_lines(t_cub3d *cub)
 	{
 		line = get_next_line(cub->map->fd, 0);
 		if (line == NULL)
-			break;
+			break ;
 		cub->map->map_lines[i] = line;
 		append_line_to_one_line(cub, line);
 		i++;
@@ -123,7 +123,8 @@ static int	set_texture_path(char **texture_ptr, char *line, t_cub3d *cub)
 	return (0);
 }
 
-static int	process_texture_component(char *line, t_map_comp *comp, t_cub3d *cub)
+static int	process_texture_component(char *line, t_map_comp *comp,
+			t_cub3d *cub)
 {
 	if (!ft_strncmp(line, "NO", 2) && ft_empty(line[2]) && !comp->no)
 		return (set_texture_path(&comp->no, line + 2, cub));
@@ -153,9 +154,9 @@ static int	process_color_component(char *line, t_map_comp *comp, t_cub3d *cub)
 
 static int	check_duplicate_component(char *line)
 {
-	if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2) || \
-		!ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2) || \
-		line[0] == 'F' || line[0] == 'C')
+	if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2)
+		|| !ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2)
+		|| line[0] == 'F' || line[0] == 'C')
 		return (1);
 	return (0);
 }
@@ -182,8 +183,8 @@ int	check_comp(char *line, t_map_comp *comp, t_cub3d *cub)
 
 static int	all_comps_found(t_map_comp *comp)
 {
-	if (!comp->no || !comp->so || !comp->we || !comp->ea || \
-		!comp->f || !comp->c)
+	if (!comp->no || !comp->so || !comp->we || !comp->ea
+		|| !comp->f || !comp->c)
 		return (0);
 	return (1);
 }
@@ -197,27 +198,36 @@ static void	check_standalone_zero(char *line, t_cub3d *cub)
 		error_msg("Standalone '0' found outside map definition\n", 1, cub);
 }
 
-static void	process_map_line(int i, int comp_status, \
-		int *map_start_index, int *map_end_index, t_cub3d *cub)
+static void	handle_map_start_end(int i, int comp_status,
+			int *start, int *end, t_cub3d *cub)
 {
-	if (comp_status == 1)
-		error_msg("Invalid component format\n", 1, cub);
-	else if (comp_status == 2)
+	if (comp_status == 2)
 	{
 		if (!all_comps_found(cub->comp))
-			error_msg("Map line found before all components were set\n", 1, cub);
-		if (*map_start_index == -1)
-			*map_start_index = i;
-		*map_end_index = i;
+			error_msg("Map line found before all components were set\n",
+				1, cub);
+		if (*start == -1)
+			*start = i;
+		*end = i;
 	}
-	else if (comp_status == 0 && *map_start_index != -1)
+	else if (comp_status == 0 && *start != -1)
 	{
-		if (*map_end_index != -1)
-			*map_end_index = i;
+		if (*end != -1)
+			*end = i;
 	}
 }
 
-static void	find_map_bounds(char **map_lines, int *start, int *end, t_cub3d *cub)
+static void	process_map_line(int i, int comp_status,
+			int *start, int *end, t_cub3d *cub)
+{
+	if (comp_status == 1)
+		error_msg("Invalid component format\n", 1, cub);
+	else
+		handle_map_start_end(i, comp_status, start, end, cub);
+}
+
+static void	find_map_bounds(char **map_lines, int *start, int *end,
+			t_cub3d *cub)
 {
 	int	i;
 	int	comp_status;
@@ -239,7 +249,8 @@ static void	find_map_bounds(char **map_lines, int *start, int *end, t_cub3d *cub
 		error_msg("No map found in file\n", 1, cub);
 }
 
-static void	check_empty_lines_in_map(char **map_lines, int start, int end, t_cub3d *cub)
+static void	check_empty_lines_in_map(char **map_lines, int start, int end,
+			t_cub3d *cub)
 {
 	int		i;
 	char	*trimmed;
@@ -276,37 +287,21 @@ static void	create_clean_map(t_cub3d *cub)
 	char	**new_map;
 	int		i;
 
-	// 1. Sadece harita yüksekliği kadar yer ayır
 	new_map = malloc(sizeof(char *) * (cub->map->map_height + 1));
 	if (!new_map)
 		error_msg("Memory allocation failed for clean map\n", 1, cub);
-
-	// 2. Eski haritadan sadece ilgili satırları kopyala
 	i = 0;
 	while (i < cub->map->map_height)
 	{
-		// start_index'ten başlayarak kopyala
-		new_map[i] = ft_strdup(cub->map->map_lines[cub->map->map_start_index + i]);
+		new_map[i] = ft_strdup(cub->map->map_lines
+				[cub->map->map_start_index + i]);
 		if (!new_map[i])
 			error_msg("Memory allocation failed for map line\n", 1, cub);
 		i++;
 	}
 	new_map[i] = NULL;
-
-	// 3. Eski kirli haritayı (headers dahil) temizle
-	free_map(cub); 
-
-	// 4. Yeni temiz haritayı ana struct'a tak
+	free_map(cub);
 	cub->map->map_lines = new_map;
-	
-	/*int j = 0;	
-	while (new_map[j] != NULL)
-	{
-		printf("%s", new_map[j]);
-		printf("\n");
-		j++;
-	}*/
-	
 }
 
 void	is_map_valid(char **map_lines, t_cub3d *cub)
@@ -319,90 +314,7 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	cub->map->map_height = map_end_index - map_start_index + 1;
 	check_empty_lines_in_map(map_lines, map_start_index, map_end_index, cub);
 	check_content_after_map(map_lines, map_end_index, cub);
-	validate_colors(cub); // Renkleri string'den int'e çevir
-	check_map_layout(cub);
-	check_content_after_map(map_lines, map_end_index, cub);
 	validate_colors(cub);
-	
-	// ÖNCE Harita düzenini kontrol et (Oyuncuyu bul, flood-fill yap)
 	check_map_layout(cub);
-
-	// SONRA Haritayı temizle (YENİ EKLENEN ADIM)
 	create_clean_map(cub);
-}
-
-static int	parse_rgb(char *line) // Bu fonksiyon tek bir renk değerini (örn: "220") kontrol eder
-{
-	int	i;
-	int j;
-	int	val;
-
-	i = 0;
-    while (line[i] && line[i] == ' ') // Baştaki boşlukları atla
-        i++;
-    if (!line[i])
-		return (-1); // Sadece boşluksa hata
-    j = i;
-    while (line[j] && ft_isdigit(line[j])) // Rakamları kontrol et
-        j++;
-    while (line[j] && line[j] == ' ') // Sondaki boşlukları atla
-        j++;
-    if (line[j] != '\0')
-		return (-1); // Rakam ve boşluk dışında bir şey varsa hata
-    val = ft_atoi(line + i);
-    if (val < 0 || val > 255)
-		return (-1); // 0-255 aralığı kontrolü
-	return (val);
-}
-
-
-static void	validate_ceiling(t_cub3d *cub)
-{
-	char	**rgb;
-	int		i;
-
-	rgb = ft_split(cub->comp->c, ',');
-	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
-	{
-		free_split(rgb);
-		error_msg("Invalid ceiling color format\n", 1, cub);
-	}
-	i = 0;
-	while (i < 3)
-	{
-		cub->comp->ceiling_color[i] = parse_rgb(rgb[i]);
-		if (cub->comp->ceiling_color[i] == -1)
-		{
-			free_split(rgb);
-			error_msg("Invalid ceiling color value (0-255 only)\n", 1, cub);
-		}
-		i++;
-	}
-	free_split(rgb);
-}
-
-void validate_colors(t_cub3d *cub)
-{
-	char	**rgb;
-	int		i;
-
-	// Zemin (Floor) Rengi Kontrolü
-	rgb = ft_split(cub->comp->f, ',');
-	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
-	{
-		free_split(rgb);
-		error_msg("Invalid floor color format\n", 1, cub);
-	}
-	i = -1;
-	while (++i < 3)
-	{
-		cub->comp->floor_color[i] = parse_rgb(rgb[i]);
-		if (cub->comp->floor_color[i] == -1)
-		{
-			free_split(rgb);
-			error_msg("Invalid floor color value (0-255 only)\n", 1, cub);
-		}
-	}
-	free_split(rgb);
-	validate_ceiling(cub);
 }

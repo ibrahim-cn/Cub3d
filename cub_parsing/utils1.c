@@ -70,7 +70,7 @@ void	free_split(char **split)
 	free(split);
 }
 
-void all_free(t_cub3d *cub)
+void	all_free(t_cub3d *cub)
 {
 	free_map(cub);
 	free_comp(cub);

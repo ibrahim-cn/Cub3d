@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_color.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/11 01:55:38 by ican              #+#    #+#             */
+/*   Updated: 2025/12/11 02:27:41 by ican             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3d.h"
 
 static int	parse_color_value(char **ptr, t_cub3d *cub, int is_last)
@@ -7,9 +19,9 @@ static int	parse_color_value(char **ptr, t_cub3d *cub, int is_last)
 
 	start = *ptr;
 	len = 0;
-	while (**ptr && (is_last || **ptr != ',') && \
-			(ft_isdigit(**ptr) || **ptr == ' ' || **ptr == '\t' || \
-			(is_last && **ptr == '\n')))
+	while (**ptr && (is_last || **ptr != ',')
+		&& (ft_isdigit(**ptr) || **ptr == ' ' || **ptr == '\t'
+			|| (is_last && **ptr == '\n')))
 	{
 		if (ft_isdigit(**ptr))
 			len++;
@@ -44,7 +56,9 @@ char	*extract_color(char *line, t_cub3d *cub)
 {
 	char	*trimmed;
 	char	*ptr;
-	int		r, g, b;
+	int		r;
+	int		g;
+	int		b;
 
 	trimmed = prepare_color_string(line);
 	if (!trimmed)
@@ -65,7 +79,6 @@ char	*extract_color(char *line, t_cub3d *cub)
 	return (ft_strdup(trimmed));
 }
 
-// Texture dosyasının varlığını ve XPM formatını kontrol eder
 void	validate_texture_file(char *path, t_cub3d *cub)
 {
 	int		fd;
@@ -74,18 +87,15 @@ void	validate_texture_file(char *path, t_cub3d *cub)
 
 	if (!path || !*path)
 		error_msg("Texture path is empty\n", 1, cub);
-	
-	// XPM uzantısını kontrol et
 	len = ft_strlen(path);
 	if (len < 5)
 		error_msg("Texture file must have .xpm extension\n", 1, cub);
 	ext = path + len - 4;
 	if (ft_strncmp(ext, ".xpm", 4) != 0)
 		error_msg("Texture file must be .xpm format\n", 1, cub);
-	
-	// Dosyanın varlığını kontrol et
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		error_msg("Texture file could not be opened or does not exist\n", 1, cub);
+		error_msg("Texture file could not be opened or does not exist\n",
+			1, cub);
 	close(fd);
 }
