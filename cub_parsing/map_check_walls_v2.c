@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check_walls_v2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 02:27:41 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/11 16:06:59 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,6 @@ static int	process_map_char(t_cub3d *cub, char c, int y, int x)
 	return (0);
 }
 
-static void	check_empty_line_in_map(char *line, int j, t_cub3d *cub)
-{
-	if (j == 0 && (line[j] == '\n' || line[j] == '\0'))
-		error_msg("Empty line inside map definition\n", 1, cub);
-}
-
 void	validate_chars_and_find_player(t_cub3d *cub)
 {
 	int		i;
@@ -97,10 +91,10 @@ void	validate_chars_and_find_player(t_cub3d *cub)
 			player_count += process_map_char(cub, line[j], i, j);
 			j++;
 		}
-		check_empty_line_in_map(line, j, cub);
+		if (j == 0 && (line[j] == '\n' || line[j] == '\0'))
+			error_msg("Empty line inside map definition\n", 1, cub);
 		i++;
 	}
 	if (player_count != 1)
 		error_msg("Map must have exactly one player start position\n", 1, cub);
 }
-

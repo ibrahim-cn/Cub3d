@@ -5,14 +5,17 @@ MLX_FLAGS = -Lminilibx-linux -lmlx -lXext -lX11 -lm
 
 SRC = main.c \
 	main_utils.c \
-	cub_parsing/controler.c \
+	cub_parsing/check_component.c \
+	cub_parsing/controls.c \
+	cub_parsing/copy_map.c \
 	cub_parsing/utils.c \
 	cub_parsing/utils1.c \
 	cub_parsing/map_check.c \
-	cub_parsing/map_check_v2.c \
+	cub_parsing/map_check2.c \
 	cub_parsing/map_check_walls.c \
 	cub_parsing/map_check_walls_v2.c \
 	cub_parsing/parsing_color.c \
+	cub_parsing/parsing_color2.c \
 	cub_raycasting/raycasting.c \
 	cub_raycasting/utils_render.c \
 	cub_raycasting/map_utils.c \

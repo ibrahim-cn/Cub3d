@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "minilibx-linux/mlx.h"
 
 static void	init_main(int ac, char **arg, t_cub3d *cub)
 {

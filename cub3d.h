@@ -6,7 +6,7 @@
 /*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/11/08 11:39:27 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:19:04 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
-# include "./minilibx-linux/mlx.h"
+#include "./minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -172,5 +172,8 @@ int		create_rgb(int r, int g, int b);
 void	init_textures(t_cub3d *cub);
 void	move_player(t_cub3d *cub);
 void	rotate_player(t_cub3d *cub);
+int		all_comps_found(t_map_comp *comp);
+void	find_map_bounds(char **map_lines, int *start, int *end,
+	t_cub3d *cub);
 
 #endif
