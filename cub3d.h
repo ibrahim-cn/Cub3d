@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 14:19:04 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/11 23:48:17 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
-#include "./minilibx-linux/mlx.h"
+# include "./minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -75,6 +75,14 @@ typedef struct s_ray
 	int		draw_start;
 	int		draw_end;
 }	t_ray;
+
+typedef struct s_tex_data
+{
+	t_img	*texture;
+	int		tex_x;
+	double	step;
+	double	tex_pos;
+}	t_tex_data;
 
 typedef struct s_player
 {
@@ -166,14 +174,25 @@ void	validate_chars_and_find_player(t_cub3d *cub);
 char	get_map_cell(t_cub3d *cub, int map_y, int map_x);
 void	free_map_copy(char **map_copy);
 void	raycasting(t_cub3d *cub);
-void	raycasting_loop(t_cub3d *cub, int x);
+void	init_ray_vars(t_cub3d *cub, int x);
+void	init_dda(t_cub3d *cub);
+void	perform_dda(t_cub3d *cub);
+void	calculate_wall_height(t_cub3d *cub);
+t_img	*select_texture(t_cub3d *cub);
+void	calculate_texture_coords(t_cub3d *cub, t_img *texture,
+			t_tex_data *tex_data);
+void	draw_ceiling(t_cub3d *cub, int x);
+void	draw_wall_slice(t_cub3d *cub, int x, t_tex_data *tex_data);
+void	draw_floor(t_cub3d *cub, int x);
+void	draw_column(t_cub3d *cub, int x, t_tex_data *tex_data);
 void	my_mlx_pixel_put(t_cub3d *cub, int x, int y, int color);
 int		create_rgb(int r, int g, int b);
 void	init_textures(t_cub3d *cub);
 void	move_player(t_cub3d *cub);
 void	rotate_player(t_cub3d *cub);
 int		all_comps_found(t_map_comp *comp);
+void	init_texture_struct(t_img *texture);
 void	find_map_bounds(char **map_lines, int *start, int *end,
-	t_cub3d *cub);
+			t_cub3d *cub);
 
 #endif

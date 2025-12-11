@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_render.c                                     :+:      :+:    :+:   */
+/*   utils_render_v2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/11 23:45:50 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 23:46:09 by ican             ###   ########.fr       */
+/*   Created: 2025/12/11 23:42:41 by ican              #+#    #+#             */
+/*   Updated: 2025/12/11 23:47:37 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-void	my_mlx_pixel_put(t_cub3d *cub, int x, int y, int color)
-{
-	char	*dst;
-
-	if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT)
-		return ;
-	dst = cub->imgt.addr + (y * cub->imgt.line_len
-			+ x * (cub->imgt.bpp / 8));
-	*(unsigned int *)dst = color;
-}
-
-int	create_rgb(int r, int g, int b)
-{
-	return (r << 16 | g << 8 | b);
-}
-
-static void	init_texture_struct(t_img *texture)
-{
-	texture->img = NULL;
-	texture->addr = NULL;
-	texture->width = 0;
-	texture->height = 0;
-	texture->bpp = 0;
-	texture->line_len = 0;
-	texture->endian = 0;
-}
 
 static void	load_texture_image(t_cub3d *cub, t_img *texture, char *path)
 {
@@ -65,4 +38,44 @@ static void	get_texture_data(t_cub3d *cub, t_img *texture)
 		error_msg("Texture data address failed\n", 1, cub);
 	if (texture->line_len <= 0 || texture->bpp <= 0)
 		error_msg("Invalid texture data parameters\n", 1, cub);
+}
+
+static void	load_image(t_cub3d *cub, t_img *texture, char *path)
+{
+	if (!path || !*path)
+		error_msg("Texture path is NULL or empty\n", 1, cub);
+	init_texture_struct(texture);
+	load_texture_image(cub, texture, path);
+	get_texture_data(cub, texture);
+}
+
+static void	validate_texture_paths(t_cub3d *cub)
+{
+	if (!cub)
+	{
+		printf("Error! Cub pointer is NULL\n");
+		exit(1);
+	}
+	if (!cub->comp)
+	{
+		printf("Error! Comp pointer is NULL\n");
+		exit(1);
+	}
+	if (!cub->comp->no)
+		error_msg("Missing NO texture path\n", 1, cub);
+	if (!cub->comp->so)
+		error_msg("Missing SO texture path\n", 1, cub);
+	if (!cub->comp->we)
+		error_msg("Missing WE texture path\n", 1, cub);
+	if (!cub->comp->ea)
+		error_msg("Missing EA texture path\n", 1, cub);
+}
+
+void	init_textures(t_cub3d *cub)
+{
+	validate_texture_paths(cub);
+	load_image(cub, &cub->textures.no, cub->comp->no);
+	load_image(cub, &cub->textures.so, cub->comp->so);
+	load_image(cub, &cub->textures.we, cub->comp->we);
+	load_image(cub, &cub->textures.ea, cub->comp->ea);
 }

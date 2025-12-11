@@ -6,7 +6,7 @@
 /*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:38:53 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/11 02:27:41 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/11 23:26:23 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,3 @@ void	free_textures(t_cub3d *cub)
 	cub->textures.ea.img = NULL;
 	cub->imgt.img = NULL;
 }
-

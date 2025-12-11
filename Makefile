@@ -17,9 +17,15 @@ SRC = main.c \
 	cub_parsing/parsing_color.c \
 	cub_parsing/parsing_color2.c \
 	cub_raycasting/raycasting.c \
+	cub_raycasting/raycast_dda.c \
+	cub_raycasting/raycast_dda_v2.c \
+	cub_raycasting/raycast_draw.c \
+	cub_raycasting/raycast_texture.c \
 	cub_raycasting/utils_render.c \
+	cub_raycasting/utils_render_v2.c \
 	cub_raycasting/map_utils.c \
 	cub_raycasting/move.c \
+	cub_raycasting/rotate.c \
 	cub_raycasting/initialize.c \
 	cub_raycasting/hooks.c \
 	$(GNL_SRCS)

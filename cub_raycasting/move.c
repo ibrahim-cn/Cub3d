@@ -84,27 +84,3 @@ void	move_player(t_cub3d *cub)
 	calculate_movement(cub, &move_x, &move_y);
 	apply_movement(cub, move_x, move_y);
 }
-
-void	rotate_player(t_cub3d *cub)
-{
-	double	old_dir_x;
-	double	old_plane_x;
-	double	speed;
-
-	if (cub->keys.right)
-		speed = ROT_SPEED;
-	else if (cub->keys.left)
-		speed = -ROT_SPEED;
-	else
-		return ;
-	old_dir_x = cub->player.dir_x;
-	cub->player.dir_x = cub->player.dir_x * cos(speed)
-		- cub->player.dir_y * sin(speed);
-	cub->player.dir_y = old_dir_x * sin(speed)
-		+ cub->player.dir_y * cos(speed);
-	old_plane_x = cub->player.plane_x;
-	cub->player.plane_x = cub->player.plane_x * cos(speed)
-		- cub->player.plane_y * sin(speed);
-	cub->player.plane_y = old_plane_x * sin(speed)
-		+ cub->player.plane_y * cos(speed);
-}
