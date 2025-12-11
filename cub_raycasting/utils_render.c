@@ -6,7 +6,7 @@
 /*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 23:45:50 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 23:46:09 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/12 00:09:45 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	create_rgb(int r, int g, int b)
 	return (r << 16 | g << 8 | b);
 }
 
-static void	init_texture_struct(t_img *texture)
+void	init_texture_struct(t_img *texture)
 {
 	texture->img = NULL;
 	texture->addr = NULL;

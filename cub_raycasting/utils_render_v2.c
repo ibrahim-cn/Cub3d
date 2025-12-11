@@ -6,7 +6,7 @@
 /*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 23:42:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 23:47:37 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/12 00:01:13 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,13 @@ static void	load_image(t_cub3d *cub, t_img *texture, char *path)
 {
 	if (!path || !*path)
 		error_msg("Texture path is NULL or empty\n", 1, cub);
-	init_texture_struct(texture);
+	texture->img = NULL;
+	texture->addr = NULL;
+	texture->width = 0;
+	texture->height = 0;
+	texture->bpp = 0;
+	texture->line_len = 0;
+	texture->endian = 0;
 	load_texture_image(cub, texture, path);
 	get_texture_data(cub, texture);
 }

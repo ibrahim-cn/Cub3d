@@ -6,7 +6,7 @@
 /*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 23:48:17 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/12 00:01:13 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,17 @@ typedef struct s_ray
 	int		draw_end;
 }	t_ray;
 
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+	int		width;
+	int		height;
+}	t_img;
+
 typedef struct s_tex_data
 {
 	t_img	*texture;
@@ -93,17 +104,6 @@ typedef struct s_player
 	double	plane_x;
 	double	plane_y;
 }	t_player;
-
-typedef struct s_img
-{
-	void	*img;
-	char	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-	int		width;
-	int		height;
-}	t_img;
 
 typedef struct s_textures
 {

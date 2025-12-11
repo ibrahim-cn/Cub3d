@@ -6,7 +6,7 @@
 /*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 23:43:25 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 23:48:41 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/12 00:01:13 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,4 @@ void	rotate_player(t_cub3d *cub)
 		- cub->player.plane_y * sin(speed);
 	cub->player.plane_y = old_plane_x * sin(speed)
 		+ cub->player.plane_y * cos(speed);
-}
-
-void	init_texture_struct(t_img *texture)
-{
-	texture->img = NULL;
-	texture->addr = NULL;
-	texture->width = 0;
-	texture->height = 0;
-	texture->bpp = 0;
-	texture->line_len = 0;
-	texture->endian = 0;
 }

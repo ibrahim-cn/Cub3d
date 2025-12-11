@@ -1,7 +1,19 @@
 NAME = cub3d
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iminilibx-linux
-MLX_FLAGS = -Lminilibx-linux -lmlx -lXext -lX11 -lm
+
+MLX_PATH = ./minilibx-linux
+MLX_REPO = https://github.com/42Paris/minilibx-linux.git
+MLX = $(MLX_PATH)/libmlx.a
+MLX_FLAGS = -L$(MLX_PATH) -lmlx -lXext -lX11 -lm
+
+LIBFT_PATH = ./libft
+LIBFT = $(LIBFT_PATH)/libft.a
+LIBFT_FLAGS = -L$(LIBFT_PATH) -lft
+
+# ---------------------- SRCS -------------------------
+
+GNL_SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 
 SRC = main.c \
 	main_utils.c \
@@ -30,36 +42,45 @@ SRC = main.c \
 	cub_raycasting/hooks.c \
 	$(GNL_SRCS)
 
-GNL_SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
-GNL_OBJS = $(GNL_SRCS:.c=.o)
-
-LIBFT = libft/libft.a
-
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME)
+# -----------------------------------------------------
+
+all: clone_mlx $(NAME)
+
+clone_mlx:
+	@if [ ! -d "$(MLX_PATH)" ]; then \
+		echo "📥 Cloning MLX repository..."; \
+		git clone $(MLX_REPO) $(MLX_PATH); \
+	fi
+
+$(MLX): clone_mlx
+	@make -C $(MLX_PATH) --no-print-directory
+	@echo "🔧 MLX Ready!"
+
+$(LIBFT):
+	@make -C $(LIBFT_PATH) --no-print-directory
+	@echo "🔧 LIBFT Ready!"
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "Compiled $<"
 
-$(NAME): $(OBJ)
-	@make -C libft
-	@make -C minilibx-linux
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
-	@echo "✅ $(NAME) compiled"
+$(NAME): $(OBJ) $(LIBFT) $(MLX)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MLX) $(MLX_FLAGS) -o $(NAME)
+	@echo "🎉 $(NAME) Ready!"
 
 clean:
-	@make clean -C libft
-	@rm -f $(OBJ) $(GNL_OBJS)
-	@make -C minilibx-linux clean
-	@echo "🧹 bye bye object files"
+	@make -C $(LIBFT_PATH) clean --no-print-directory || true
+	@make -C $(MLX_PATH) clean --no-print-directory || true
+	@rm -f $(OBJ)
+	@echo "🧹 Object files removed"
 
-fclean:
-	@make fclean -C libft
-	@rm -rf $(OBJ)
+fclean: clean
 	@rm -f $(NAME)
-	@echo "🧼 fully cleaned up"
+	@make -C $(LIBFT_PATH) fclean --no-print-directory || true
+	@echo "🧼 Full clean done"
 
 re: fclean all
 
-.PHONY: all clean fclean re 
+.PHONY: all clean fclean re clone_mlx
