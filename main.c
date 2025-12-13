@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:00:41 by ican              #+#    #+#             */
-/*   Updated: 2025/11/08 11:39:15 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/13 23:38:17 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static void	init_main(int ac, char **arg, t_cub3d *cub)
 
 int	main(int ac, char **arg)
 {
-	static t_cub3d		cub;
-	static t_map		map;
-	static t_map_comp	comp;
+	t_cub3d		cub;
+	t_map		map;
+	t_map_comp	comp;
 
 	cub.map = &map;
 	cub.comp = &comp;
