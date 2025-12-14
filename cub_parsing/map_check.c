@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 22:00:41 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/14 14:38:13 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/14 15:29:02 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,9 +150,9 @@ void	is_map_valid(char **map_lines, t_cub3d *cub)
 	find_map_bounds(map_lines, &map_start_index, &map_end_index, cub);
 	cub->map->map_start_index = map_start_index;
 	cub->map->map_height = map_end_index - map_start_index + 1;
-	check_empty_lines_in_map(map_lines, map_start_index, map_end_index, cub);
 	check_content_after_map(map_lines, map_end_index, cub);
 	validate_colors(cub);
 	check_map_layout(cub);
+	check_empty_lines_in_map(map_lines, map_start_index, map_end_index, cub);
 	create_clean_map(cub);
 }

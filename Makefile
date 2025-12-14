@@ -78,6 +78,7 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME)
+	@rm -rf $(MLX_PATH)
 	@make -C $(LIBFT_PATH) fclean --no-print-directory || true
 	@echo "🧼 Full clean done"
 

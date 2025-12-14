@@ -6,7 +6,7 @@
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 09:15:59 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/14 13:46:19 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 16:45:42 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ void	free_map(t_cub3d *cub)
 
 	if (!cub || !cub->map)
 		return ;
+	if (cub->map->name)
+	{
+		free(cub->map->name);
+		cub->map->name = NULL;
+	}
 	if (cub->map->map_lines)
 	{
 		i = 0;

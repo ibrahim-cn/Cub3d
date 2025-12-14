@@ -6,11 +6,48 @@
 /*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:00:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/14 12:24:57 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 16:45:42 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+
+char	*space_is_not_important(char *str)
+{
+	char	*tmp;
+	int		i;
+	int		j;
+	int		len;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	i = 0;
+	j = 0;
+	if (str[0] == '/')
+	{
+		len = len - 1;
+		i = 1;
+	}
+	if (len <= 0)
+		return (ft_strdup(""));
+	tmp = (char *)malloc((len + 1) * sizeof(char));
+	if (!tmp)
+		return (NULL);
+	len = ft_strlen(str);
+	while (i < len)
+	{
+		tmp[j] = str[i];
+		j++;
+		i++;
+	}
+	tmp[j] = '\0';
+	return (tmp);
+}
+
+
+
 
 static void	init_main(int ac, char **arg, t_cub3d *cub)
 {
@@ -18,7 +55,7 @@ static void	init_main(int ac, char **arg, t_cub3d *cub)
 		error_msg("Wrong number of arguments!\n", 1, cub);
 	if (cub_check(arg[1]))
 		error_msg("Wrong Type of file\n", 2, cub);
-	cub->map->name = arg[1];
+	cub->map->name = space_is_not_important(arg[1]);
 }
 
 int	main(int ac, char **arg)
