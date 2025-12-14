@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 22:00:41 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/14 13:54:43 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 14:38:13 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	is_whitespace(char c)
 	return (c == ' ' || c == '\t');
 }
 
-static void	check_double_map_in_line(char *line, t_cub3d *cub)
+static void	check_double_map(char *line, t_cub3d *cub)
 {
 	int	i;
 	int	found_first_map;
@@ -41,7 +41,7 @@ static void	check_double_map_in_line(char *line, t_cub3d *cub)
 		if (is_map_char(line[i]) && line[i] != ' ')
 		{
 			if (found_first_map && in_whitespace && whitespace_count > 2)
-				error_msg("Double map detected (multiple map blocks in one line)\n", 1, cub);
+				error_msg("Double map detected\n", 1, cub);
 			found_first_map = 1;
 			in_whitespace = 0;
 			whitespace_count = 0;
@@ -81,8 +81,8 @@ static void	check_empty_lines_in_map(char **map_lines, int start, int end,
 		trimmed = trim_spaces(map_lines[i]);
 		is_empty = (!trimmed || !*trimmed);
 		if (is_empty)
-			error_msg("Empty line inside map definition\n", 1, cub);
-		check_double_map_in_line(map_lines[i], cub);
+			error_msg("MMMMEmpty line inside map definition\n", 1, cub);
+		check_double_map(map_lines[i], cub);
 		i++;
 	}
 }
