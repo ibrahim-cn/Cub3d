@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 02:37:46 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	free_existing_map_lines(t_cub3d *cub)
 {
 	int	i;
 
-	if (!cub->map->map_lines)
+	if (!cub || !cub->map || !cub->map->map_lines)
 		return ;
 	i = 0;
 	while (cub->map->map_lines[i])
@@ -79,11 +79,10 @@ void	eliminate_one_line(t_cub3d *cub)
 {
 	char	*trimmed;
 
-	if (check_tab(cub->map->one_line))
-	{
-		printf("error düzenle");
-		exit(1);
-	}
+	if (!cub || !cub->map)
+		return ;
+	if (cub->map->one_line && check_tab(cub->map->one_line))
+		error_msg("Tab character found in map\n", 2, cub);
 	if (!cub->map->one_line)
 		return ;
 	trimmed = ft_strtrim(cub->map->one_line, "\t\n\v\f\r");
@@ -99,6 +98,8 @@ void	split_one_line(t_cub3d *cub)
 	char	**lines;
 	int		count;
 
+	if (!cub || !cub->map || !cub->map->one_line)
+		return ;
 	free_existing_map_lines(cub);
 	count = count_lines_in_one_line(cub->map->one_line);
 	lines = (char **)malloc(sizeof(char *) * (count + 1));

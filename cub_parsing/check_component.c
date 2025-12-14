@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_component.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:39:57 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/11 15:00:15 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/14 12:35:12 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	all_comps_found(t_map_comp *comp)
 {
+	if (!comp)
+		return (0);
 	if (!comp->no || !comp->so || !comp->we || !comp->ea
 		|| !comp->f || !comp->c)
 		return (0);
@@ -64,6 +66,8 @@ int	check_comp(char *line, t_map_comp *comp, t_cub3d *cub)
 {
 	int	result;
 
+	if (!line || !comp || !cub)
+		return (1);
 	line = trim_spaces(line);
 	if (!line || !*line)
 		return (0);

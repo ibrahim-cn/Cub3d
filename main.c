@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:00:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/13 23:38:17 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 12:24:57 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ int	main(int ac, char **arg)
 	t_map		map;
 	t_map_comp	comp;
 
+	ft_bzero(&cub, sizeof(t_cub3d));
+	ft_bzero(&map, sizeof(t_map));
+	ft_bzero(&comp, sizeof(t_map_comp));
 	cub.map = &map;
 	cub.comp = &comp;
 	init_main(ac, arg, &cub);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 09:17:16 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/11 02:27:41 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 12:24:18 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 void	error_msg(char *message, int code, t_cub3d *cub)
 {
 	printf("Error! %s", message);
-	free_map(cub);
-	free_comp(cub);
+	if (cub)
+	{
+		free_map(cub);
+		free_comp(cub);
+	}
 	exit(code);
 }
 

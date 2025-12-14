@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_check_v2.c                                     :+:      :+:    :+:   */
+/*   parsing_color2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 02:27:41 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static void	validate_ceiling(t_cub3d *cub)
 	char	**rgb;
 	int		i;
 
+	if (!cub || !cub->comp || !cub->comp->c)
+		error_msg("Invalid cub or comp pointer\n", 1, cub);
 	rgb = ft_split(cub->comp->c, ',');
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 	{
@@ -66,6 +68,10 @@ void	validate_colors(t_cub3d *cub)
 	char	**rgb;
 	int		i;
 
+	if (!cub || !cub->comp)
+		error_msg("Invalid cub or comp pointer\n", 1, cub);
+	if (!cub->comp->f || !cub->comp->c)
+		error_msg("Missing floor or ceiling color\n", 1, cub);
 	rgb = ft_split(cub->comp->f, ',');
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 	{

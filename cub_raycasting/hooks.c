@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 23:28:11 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 23:28:17 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	close_window(t_cub3d *cub)
 	free_map(cub);
 	free_comp(cub);
 	free_textures(cub);
-	if (cub->win)
+	if (cub->win && cub->mlx)
 		mlx_destroy_window(cub->mlx, cub->win);
 	if (cub->mlx)
 	{

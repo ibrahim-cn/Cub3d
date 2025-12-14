@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_render_v2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 23:42:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/12 00:01:13 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,9 @@ static void	load_image(t_cub3d *cub, t_img *texture, char *path)
 static void	validate_texture_paths(t_cub3d *cub)
 {
 	if (!cub)
-	{
-		printf("Error! Cub pointer is NULL\n");
-		exit(1);
-	}
+		error_msg("Cub pointer is NULL\n", 1, cub);
 	if (!cub->comp)
-	{
-		printf("Error! Comp pointer is NULL\n");
-		exit(1);
-	}
+		error_msg("Comp pointer is NULL\n", 1, cub);
 	if (!cub->comp->no)
 		error_msg("Missing NO texture path\n", 1, cub);
 	if (!cub->comp->so)

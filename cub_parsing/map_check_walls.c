@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check_walls.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 10:46:27 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/11 12:09:44 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static char	**duplicate_map(t_cub3d *cub)
 	int		i;
 	int		start;
 
+	if (!cub || !cub->map || !cub->map->map_lines)
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	start = cub->map->map_start_index;
 	copy = (char **)malloc(sizeof(char *) * (cub->map->map_height + 1));
 	if (!copy)
@@ -25,6 +27,13 @@ static char	**duplicate_map(t_cub3d *cub)
 	i = 0;
 	while (i < cub->map->map_height)
 	{
+		if (!cub->map->map_lines[start + i])
+		{
+			while (i > 0)
+				free(copy[--i]);
+			free(copy);
+			error_msg("Invalid map line in duplicate\n", 1, cub);
+		}
 		copy[i] = ft_strdup(cub->map->map_lines[start + i]);
 		if (!copy[i])
 		{
@@ -43,6 +52,8 @@ void	free_map_copy(char **map_copy)
 {
 	int	i;
 
+	if (!map_copy)
+		return ;
 	i = 0;
 	while (map_copy[i])
 	{
@@ -75,6 +86,8 @@ void	check_map_layout(t_cub3d *cub)
 {
 	char	**map_copy;
 
+	if (!cub || !cub->map)
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	validate_chars_and_find_player(cub);
 	map_copy = duplicate_map(cub);
 	flood_fill(cub, map_copy, cub->player.pos_y, cub->player.pos_x);

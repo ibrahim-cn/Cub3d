@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check_walls_v2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/11 16:06:59 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/14 12:35:42 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,17 @@ void	validate_chars_and_find_player(t_cub3d *cub)
 	int		player_count;
 	char	*line;
 
+	if (!cub || !cub->map || !cub->map->map_lines)
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	player_count = 0;
 	i = 0;
 	while (i < cub->map->map_height)
 	{
+		if (!cub->map->map_lines[cub->map->map_start_index + i])
+			error_msg("Invalid map line index\n", 1, cub);
 		line = cub->map->map_lines[cub->map->map_start_index + i];
+		if (!line)
+			error_msg("Null map line found\n", 1, cub);
 		j = 0;
 		while (line[j] && line[j] != '\n')
 		{

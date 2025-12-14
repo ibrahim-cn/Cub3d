@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:19:43 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/11 15:56:19 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@ void	check_map_exist(t_cub3d *cub)
 {
 	int	fd;
 
+	if (!cub || !cub->map || !cub->map->name)
+		error_msg("Invalid cub or map pointer\n", 2, cub);
 	fd = open(cub->map->name, O_RDONLY);
 	if (fd < 0)
-	{
-		close(fd);
 		error_msg("File could not found or opened\n", 2, cub);
-	}
 	cub->map->fd = fd;
 }
 
@@ -55,6 +54,8 @@ void	find_map_bounds(char **map_lines, int *start, int *end,
 	int	i;
 	int	comp_status;
 
+	if (!map_lines || !start || !end || !cub || !cub->comp)
+		error_msg("Invalid parameters for find_map_bounds\n", 1, cub);
 	i = 0;
 	*start = -1;
 	*end = -1;

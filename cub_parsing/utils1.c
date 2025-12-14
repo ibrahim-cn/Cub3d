@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 09:15:59 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/10/29 09:17:22 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	free_map(t_cub3d *cub)
 {
 	int	i;
 
-	if (!cub->map || !cub->map->map_lines)
+	if (!cub || !cub->map)
 		return ;
 	if (cub->map->map_lines)
 	{
@@ -41,6 +41,8 @@ void	free_map(t_cub3d *cub)
 
 void	free_comp(t_cub3d *cub)
 {
+	if (!cub || !cub->comp)
+		return ;
 	if (cub->comp->so)
 		free(cub->comp->so);
 	if (cub->comp->ea)
