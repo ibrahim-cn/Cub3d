@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 23:35:05 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,18 @@ static int	count_lines_in_one_line(char *one_line)
 {
 	char	*str;
 	int		count;
+	int		len;
 
 	count = 0;
 	str = one_line;
+	len = ft_strlen(one_line);
 	while (*str)
 	{
 		if (*str == '\n')
 			count++;
 		str++;
 	}
-	if (one_line[ft_strlen(one_line) - 1] != '\n')
+	if (len > 0 && one_line[len - 1] != '\n')
 		count++;
 	return (count);
 }

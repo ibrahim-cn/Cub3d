@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check_walls.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 10:46:27 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/20 22:58:10 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 23:27:30 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	check_map_layout(t_cub3d *cub)
 	if (has_unreachable_area(map_copy))
 	{
 		free_map_copy(map_copy);
-		error_msg("Ups, double map! hihi 🤭🤭🤭\n", 1, cub);
+		error_msg("Ups, double map detected!\n", 1, cub);
 	}
 	free_map_copy(map_copy);
 }

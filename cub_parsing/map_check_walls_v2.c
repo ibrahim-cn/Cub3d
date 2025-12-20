@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check_walls_v2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/20 23:01:40 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 23:24:42 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	process_map_line(t_cub3d *cub, int i)
 		j++;
 	}
 	if (j == 0 && (line[j] == '\n' || line[j] == '\0'))
-		error_msg("ZZZEmpty line inside map definition\n", 1, cub);
+		error_msg("Empty line inside map definition\n", 1, cub);
 	return (player_count);
 }
 

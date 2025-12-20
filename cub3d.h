@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/12/20 23:07:03 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 23:54:53 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # define KEY_ESC 65307
 # define EVENT_KEY_PRESS 2
 # define EVENT_DESTROY 17
-# define MOVE_SPEED 0.1
-# define ROT_SPEED 0.1
+# define MOVE_SPEED 0.05
+# define ROT_SPEED 0.09
 # define PLAYER_SIZE 0.2
 
 typedef struct s_map
