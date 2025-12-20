@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   map_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 22:00:41 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/14 15:29:02 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 20:38:43 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
+/*
 static int	is_map_char(char c)
 {
 	return (c == '0' || c == '1' || c == 'N' || c == 'S'
@@ -62,7 +62,7 @@ static void	check_double_map(char *line, t_cub3d *cub)
 		}
 		i++;
 	}
-}
+} */
 
 static void	check_empty_lines_in_map(char **map_lines, int start, int end,
 			t_cub3d *cub)
@@ -82,7 +82,7 @@ static void	check_empty_lines_in_map(char **map_lines, int start, int end,
 		is_empty = (!trimmed || !*trimmed);
 		if (is_empty)
 			error_msg("MMMMEmpty line inside map definition\n", 1, cub);
-		check_double_map(map_lines[i], cub);
+		//check_double_map(map_lines[i], cub);
 		i++;
 	}
 }
