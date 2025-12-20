@@ -3,35 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   map_check_walls_v2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/14 14:25:35 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/20 23:01:40 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-static int	is_empty(t_cub3d *cub, int y, int x)
-{
-	char	**map;
-	int		start;
-	int		height;
-
-	map = cub->map->map_lines;
-	start = cub->map->map_start_index;
-	height = cub->map->map_height;
-	if (y < 0 || y >= height)
-		return (1);
-	if (!map[start + y])
-		return (1);
-	if (x < 0 || (int)ft_strlen(map[start + y]) <= x)
-		return (1);
-	if (map[start + y][x] == ' ' || map[start + y][x] == '\n'
-		|| map[start + y][x] == '\0')
-		return (1);
-	return (0);
-}
 
 static void	check_map_closed(t_cub3d *cub, int y, int x)
 {
@@ -73,12 +52,31 @@ static int	process_map_char(t_cub3d *cub, char c, int y, int x)
 	return (0);
 }
 
-void	validate_chars_and_find_player(t_cub3d *cub)
+static int	process_map_line(t_cub3d *cub, int i)
 {
-	int		i;
 	int		j;
 	int		player_count;
 	char	*line;
+
+	line = cub->map->map_lines[cub->map->map_start_index + i];
+	if (!line)
+		error_msg("Null map line found\n", 1, cub);
+	player_count = 0;
+	j = 0;
+	while (line[j] && line[j] != '\n')
+	{
+		player_count += process_map_char(cub, line[j], i, j);
+		j++;
+	}
+	if (j == 0 && (line[j] == '\n' || line[j] == '\0'))
+		error_msg("ZZZEmpty line inside map definition\n", 1, cub);
+	return (player_count);
+}
+
+void	validate_chars_and_find_player(t_cub3d *cub)
+{
+	int		i;
+	int		player_count;
 
 	if (!cub || !cub->map || !cub->map->map_lines)
 		error_msg("Invalid cub or map pointer\n", 1, cub);
@@ -88,17 +86,7 @@ void	validate_chars_and_find_player(t_cub3d *cub)
 	{
 		if (!cub->map->map_lines[cub->map->map_start_index + i])
 			error_msg("Invalid map line index\n", 1, cub);
-		line = cub->map->map_lines[cub->map->map_start_index + i];
-		if (!line)
-			error_msg("Null map line found\n", 1, cub);
-		j = 0;
-		while (line[j] && line[j] != '\n')
-		{
-			player_count += process_map_char(cub, line[j], i, j);
-			j++;
-		}
-		if (j == 0 && (line[j] == '\n' || line[j] == '\0'))
-			error_msg("ZZZEmpty line inside map definition\n", 1, cub);
+		player_count += process_map_line(cub, i);
 		i++;
 	}
 	if (player_count != 1)

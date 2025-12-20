@@ -6,7 +6,7 @@
 /*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/12/12 00:01:13 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 23:07:03 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,14 @@ void	rotate_player(t_cub3d *cub);
 int		all_comps_found(t_map_comp *comp);
 void	init_texture_struct(t_img *texture);
 void	find_map_bounds(char **map_lines, int *start, int *end,
+			t_cub3d *cub);
+void	init_structures(t_cub3d *cub, t_map *map, t_map_comp *comp);
+int		has_unreachable_area(char **map);
+void	free_map_copy(char **map_copy);
+char	**duplicate_map(t_cub3d *cub);
+void	process_line(t_cub3d *cub, char *line, int i);
+int		is_empty(t_cub3d *cub, int y, int x);
+void	check_empty_lines_in_map(char **map_lines, int start, int end,
 			t_cub3d *cub);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   copy_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:05:35 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/14 12:28:58 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 23:00:24 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static void	read_and_store_lines(t_cub3d *cub)
 {
 	char	*line;
 	int		i;
-	char	*joined;
 
 	if (!cub || !cub->map || !cub->map->map_lines || !cub->map->one_line)
 		error_msg("Invalid cub or map pointer\n", 2, cub);
@@ -74,15 +73,7 @@ static void	read_and_store_lines(t_cub3d *cub)
 		line = get_next_line(cub->map->fd, 0);
 		if (line == NULL)
 			break ;
-		cub->map->map_lines[i] = line;
-		joined = ft_strjoin(cub->map->one_line, line);
-		if (!joined)
-		{
-			free(line);
-			error_msg("Memory allocation failed\n", 2, cub);
-		}
-		free(cub->map->one_line);
-		cub->map->one_line = joined;
+		process_line(cub, line, i);
 		i++;
 	}
 	cub->map->map_lines[i] = NULL;

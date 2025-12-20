@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <<ican@student.42.fr>>                +#+  +:+       +#+        */
+/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:19:43 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/14 16:15:57 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/20 23:06:03 by ican             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,26 @@ void	find_map_bounds(char **map_lines, int *start, int *end,
 		error_msg("Missing one or more map components\n", 1, cub);
 	if (*start == -1)
 		error_msg("No map found in file\n", 1, cub);
+}
+
+void	check_empty_lines_in_map(char **map_lines, int start, int end,
+			t_cub3d *cub)
+{
+	int		i;
+	char	*trimmed;
+	int		is_empty;
+
+	if (!map_lines || !cub)
+		error_msg("Invalid parameters\n", 1, cub);
+	i = start;
+	while (i <= end)
+	{
+		if (!map_lines[i])
+			error_msg("Null map line found\n", 1, cub);
+		trimmed = trim_spaces(map_lines[i]);
+		is_empty = (!trimmed || !*trimmed);
+		if (is_empty)
+			error_msg("MMMMEmpty line inside map definition\n", 1, cub);
+		i++;
+	}
 }

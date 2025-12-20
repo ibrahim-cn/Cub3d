@@ -12,10 +12,24 @@
 
 #include "../cub3d.h"
 
-void	free_map(t_cub3d *cub)
+static void	free_map_lines(t_cub3d *cub)
 {
 	int	i;
 
+	if (!cub->map->map_lines)
+		return ;
+	i = 0;
+	while (cub->map->map_lines[i])
+	{
+		free(cub->map->map_lines[i]);
+		i++;
+	}
+	free(cub->map->map_lines);
+	cub->map->map_lines = NULL;
+}
+
+void	free_map(t_cub3d *cub)
+{
 	if (!cub || !cub->map)
 		return ;
 	if (cub->map->name)
@@ -23,17 +37,7 @@ void	free_map(t_cub3d *cub)
 		free(cub->map->name);
 		cub->map->name = NULL;
 	}
-	if (cub->map->map_lines)
-	{
-		i = 0;
-		while (cub->map->map_lines[i])
-		{
-			free(cub->map->map_lines[i]);
-			i++;
-		}
-		free(cub->map->map_lines);
-		cub->map->map_lines = NULL;
-	}
+	free_map_lines(cub);
 	if (cub->map->one_line)
 	{
 		free(cub->map->one_line);

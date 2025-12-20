@@ -16,6 +16,7 @@ LIBFT_FLAGS = -L$(LIBFT_PATH) -lft
 GNL_SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 
 SRC = main.c \
+	utils.c \
 	main_utils.c \
 	cub_parsing/check_component.c \
 	cub_parsing/controls.c \
