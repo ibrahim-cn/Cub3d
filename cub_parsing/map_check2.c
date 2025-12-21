@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_check2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 13:19:43 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/20 23:06:03 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/21 12:06:14 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	check_map_exist(t_cub3d *cub)
 	int	fd;
 
 	if (!cub || !cub->map || !cub->map->name)
-		error_msg("Invalid cub or map pointer\n", 2, cub);
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	fd = open(cub->map->name, O_RDONLY);
 	if (fd < 0)
-		error_msg("File could not found or opened\n", 2, cub);
+		error_msg("File could not found or opened\n", 1, cub);
 	cub->map->fd = fd;
 }
 
@@ -95,7 +95,7 @@ void	check_empty_lines_in_map(char **map_lines, int start, int end,
 		trimmed = trim_spaces(map_lines[i]);
 		is_empty = (!trimmed || !*trimmed);
 		if (is_empty)
-			error_msg("MMMMEmpty line inside map definition\n", 1, cub);
+			error_msg("Empty line inside map definition\n", 1, cub);
 		i++;
 	}
 }

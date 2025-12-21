@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:00:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/20 22:52:59 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/21 12:05:00 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	check_args(int ac, char **arg, t_cub3d *cub)
 	if (ac != 2)
 		error_msg("Wrong number of arguments!\n", 1, cub);
 	if (cub_check(arg[1]))
-		error_msg("Wrong Type of file\n", 2, cub);
+		error_msg("Wrong Type of file\n", 1, cub);
 	cub->map->name = space_is_not_important(arg[1]);
 }
 

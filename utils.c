@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 21:58:49 by ican              #+#    #+#             */
-/*   Updated: 2025/12/20 23:07:14 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/21 12:05:06 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	process_line(t_cub3d *cub, char *line, int i)
 	if (!joined)
 	{
 		free(line);
-		error_msg("Memory allocation failed\n", 2, cub);
+		error_msg("Memory allocation failed\n", 1, cub);
 	}
 	free(cub->map->one_line);
 	cub->map->one_line = joined;

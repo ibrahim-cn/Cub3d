@@ -6,7 +6,7 @@
 /*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 02:27:41 by ican              #+#    #+#             */
-/*   Updated: 2025/12/20 23:35:05 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/21 12:04:52 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	parse_lines_from_one_line(char **lines, char *one_line,
 		}
 		lines[i] = ft_substr(start, 0, len);
 		if (!lines[i])
-			error_msg("Memory allocation failed\n", 2, cub);
+			error_msg("Memory allocation failed\n", 1, cub);
 		i++;
 		if (*str == '\n')
 			str++;
@@ -84,12 +84,12 @@ void	eliminate_one_line(t_cub3d *cub)
 	if (!cub || !cub->map)
 		return ;
 	if (cub->map->one_line && check_tab(cub->map->one_line))
-		error_msg("Tab character found in map\n", 2, cub);
+		error_msg("Tab character found in map\n", 1, cub);
 	if (!cub->map->one_line)
 		return ;
 	trimmed = ft_strtrim(cub->map->one_line, "\t\n\v\f\r");
 	if (!trimmed)
-		error_msg("Memory allocation failed\n", 2, cub);
+		error_msg("Memory allocation failed\n", 1, cub);
 	free(cub->map->one_line);
 	cub->map->one_line = trimmed;
 	split_one_line(cub);
@@ -106,7 +106,7 @@ void	split_one_line(t_cub3d *cub)
 	count = count_lines_in_one_line(cub->map->one_line);
 	lines = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!lines)
-		error_msg("Memory allocation failed\n", 2, cub);
+		error_msg("Memory allocation failed\n", 1, cub);
 	parse_lines_from_one_line(lines, cub->map->one_line, count, cub);
 	cub->map->map_lines = lines;
 }

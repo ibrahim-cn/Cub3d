@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   copy_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ican <ican@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:05:35 by aaydogdu          #+#    #+#             */
-/*   Updated: 2025/12/20 23:00:24 by ican             ###   ########.fr       */
+/*   Updated: 2025/12/21 12:05:35 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	count_file_lines(t_cub3d *cub)
 	int		line_count;
 
 	if (!cub || !cub->map || cub->map->fd < 0)
-		error_msg("Invalid cub or map pointer\n", 2, cub);
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	line_count = 0;
 	while (1)
 	{
@@ -35,27 +35,27 @@ static int	count_file_lines(t_cub3d *cub)
 static void	reopen_file(t_cub3d *cub)
 {
 	if (!cub || !cub->map || !cub->map->name)
-		error_msg("Invalid cub or map pointer\n", 2, cub);
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	if (cub->map->fd > 0)
 		close(cub->map->fd);
 	cub->map->fd = open(cub->map->name, O_RDONLY);
 	if (cub->map->fd < 0)
-		error_msg("File could not be reopened\n", 2, cub);
+		error_msg("File could not be reopened\n", 1, cub);
 }
 
 static void	allocate_map_memory(t_cub3d *cub, int line_count)
 {
 	if (!cub || !cub->map)
-		error_msg("Invalid cub or map pointer\n", 2, cub);
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	cub->map->map_lines = (char **)malloc(sizeof(char *) * (line_count + 1));
 	if (!cub->map->map_lines)
-		error_msg("Memory allocation failed\n", 2, cub);
+		error_msg("Memory allocation failed\n", 1, cub);
 	cub->map->one_line = (char *)malloc(1);
 	if (!cub->map->one_line)
 	{
 		free(cub->map->map_lines);
 		cub->map->map_lines = NULL;
-		error_msg("Memory allocation failed\n", 2, cub);
+		error_msg("Memory allocation failed\n", 1, cub);
 	}
 	cub->map->one_line[0] = '\0';
 }
@@ -66,7 +66,7 @@ static void	read_and_store_lines(t_cub3d *cub)
 	int		i;
 
 	if (!cub || !cub->map || !cub->map->map_lines || !cub->map->one_line)
-		error_msg("Invalid cub or map pointer\n", 2, cub);
+		error_msg("Invalid cub or map pointer\n", 1, cub);
 	i = 0;
 	while (1)
 	{

@@ -11,8 +11,6 @@ LIBFT_PATH = ./libft
 LIBFT = $(LIBFT_PATH)/libft.a
 LIBFT_FLAGS = -L$(LIBFT_PATH) -lft
 
-# ---------------------- SRCS -------------------------
-
 GNL_SRCS = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 
 SRC = main.c \
@@ -45,7 +43,6 @@ SRC = main.c \
 
 OBJ = $(SRC:.c=.o)
 
-# -----------------------------------------------------
 
 all: clone_mlx $(NAME)
 

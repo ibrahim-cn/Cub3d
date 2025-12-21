@@ -6,7 +6,7 @@
 /*   By: aaydogdu <aaydogdu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 15:02:17 by ican              #+#    #+#             */
-/*   Updated: 2025/12/20 23:54:53 by aaydogdu         ###   ########.fr       */
+/*   Updated: 2025/12/21 11:46:45 by aaydogdu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # define KEY_ESC 65307
 # define EVENT_KEY_PRESS 2
 # define EVENT_DESTROY 17
-# define MOVE_SPEED 0.05
-# define ROT_SPEED 0.09
+# define MOVE_SPEED 0.07
+# define ROT_SPEED 0.05
 # define PLAYER_SIZE 0.2
 
 typedef struct s_map
