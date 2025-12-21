@@ -35,7 +35,7 @@ void	draw_wall_slice(t_cub3d *cub, int x, t_tex_data *tex_data)
 	char	*dst;
 
 	y = cub->ray.draw_start;
-	while (y < cub->ray.draw_end)
+	while (y <= cub->ray.draw_end)
 	{
 		tex_y = (int)tex_data->tex_pos % tex_data->texture->height;
 		tex_data->tex_pos += tex_data->step;
@@ -67,6 +67,6 @@ void	draw_floor(t_cub3d *cub, int x)
 void	draw_column(t_cub3d *cub, int x, t_tex_data *tex_data)
 {
 	draw_ceiling(cub, x);
-	draw_wall_slice(cub, x, tex_data);
 	draw_floor(cub, x);
+	draw_wall_slice(cub, x, tex_data);
 }
